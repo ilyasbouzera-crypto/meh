@@ -2,7 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0e">
 <title>ILYAS — Streaming Anime</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -221,14 +225,148 @@ iframe.pframe{position:absolute;inset:0;width:100%;height:100%;border:none;displ
 .footer-logo em{color:var(--ac);font-style:normal}
 .footer-txt{font-size:.57rem;color:var(--tx3)}
 
+/* iOS safari 100vh fix */
+@supports(-webkit-touch-callout:none){
+  .hero{height:calc(100svh - 50px)}
+  #watchPage{height:100svh}
+}
+/* Touch action for scrollable rows */
+.scroll-row,.filters,.w-lang-flags,.w-season-tabs,.adm-tabs{touch-action:pan-x}
+/* Active states for touch */
+.card-mini:active,.card-plan:active,.card-grid:active{opacity:.85;transform:scale(.98)}
+.nav-link:active,.hero-btn:active,.fbt:active,.w-nav-btn:active,.modal-btn:active{opacity:.75}
+.w-lang-flag:active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+
+/* ══════════════════════════════════════
+   MOBILE — touch-first, ≤580px
+══════════════════════════════════════ */
 @media(max-width:580px){
-  .nav{padding:0 .7rem;gap:.5rem}
-  .hero-c{padding:0 1rem 2rem}
-  .hero-title{font-size:1.8rem}
-  .section{padding:1rem .8rem}
-  .w-ctrl-top,.w-nav-bar{padding:.35rem .6rem}
-  .w-nav-btn{font-size:.55rem;padding:6px 6px}
-  .w-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* === GLOBAL === */
+  *{-webkit-tap-highlight-color:transparent}
+  body{overflow-x:hidden}
+
+  /* === NAV === */
+  .nav{padding:0 .6rem;gap:.35rem;height:50px}
+  .nav-logo{font-size:1.25rem;letter-spacing:.5px}
+  .nav-sep{display:none}
+  /* Barre de recherche compacte sur mobile */
+  .nav-search{padding:5px 8px;flex:1;min-width:0}
+  .nav-search input{width:100%;font-size:.8rem}
+  .nav-links{gap:0;margin-left:.2rem}
+  .nav-link{padding:0 .45rem;font-size:.66rem;gap:.2rem}
+  .nav-link svg{display:none}
+  /* Avatar only — hide text label on mobile */
+  #navUserLabel{display:none}
+  .nav-user-btn{padding:4px 7px;font-size:.65rem;margin-left:.1rem}
+
+  /* === HERO === */
+  .hero{max-height:380px;min-height:280px}
+  .hero-c{padding:0 .9rem 1.8rem;max-width:100%}
+  .hero-title{font-size:1.7rem;letter-spacing:0}
+  .hero-desc{font-size:.75rem;line-height:1.6;margin-bottom:.9rem;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+  .hero-genre{font-size:.56rem;padding:2px 5px}
+  .hero-btn{padding:9px 16px;font-size:.75rem;min-height:40px}
+  .hero-badge{font-size:.55rem}
+
+  /* === SECTIONS & CARDS === */
+  .section{padding:.9rem .75rem .7rem}
+  .sec-title{font-size:.88rem}
+  /* Cards scroll row plus larges sur mobile */
+  .card-mini{flex:0 0 115px}
+  .card-mini-img{height:160px}
+  .card-mini-title{font-size:.63rem}
+  .card-plan{flex:0 0 105px}
+  .card-plan-img{height:148px}
+  /* Catalogue : 3 colonnes bien serrées */
+  .cat-grid{grid-template-columns:repeat(3,1fr);gap:.5rem}
+  .card-grid-body{padding:.35rem .4rem .45rem}
+  .card-grid-title{font-size:.62rem}
+  /* Overlay play visible au tap sur mobile */
+  .card-grid:active .card-grid-ov{opacity:1}
+
+  /* Filtres : scroll horizontal au lieu de wrap */
+  .filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:.6rem;-webkit-overflow-scrolling:touch;gap:.25rem}
+  .filters::-webkit-scrollbar{height:0}
+  .fbt{flex-shrink:0;padding:5px 12px;font-size:.65rem;min-height:32px}
+
+  /* === WATCH PAGE === */
+  .wbar{height:46px;padding:0 .7rem;gap:.5rem}
+  .wbar-back{padding:5px 9px;font-size:.65rem;min-height:36px}
+  .wbar-title{font-size:.88rem}
+  .wbar-sub{display:none}
+  .w-anime-banner{height:120px}
+  .w-anime-title{font-size:.9rem}
+  /* Saison tabs : scroll horizontal */
+  .w-season-tabs{padding:.4rem .6rem;gap:.25rem;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .w-season-tabs::-webkit-scrollbar{height:0}
+  .w-stab{flex-shrink:0;padding:5px 11px;font-size:.6rem;min-height:32px}
+  /* Controles lecteur : stack vertical sur petit écran */
+  .w-ctrl-top{flex-direction:column;align-items:stretch;gap:.4rem;padding:.5rem .7rem}
+  .as-ep-sel,.as-lect-sel{width:100%;min-width:0;font-size:.78rem;padding:8px 28px 8px 10px;min-height:40px}
+  /* Boutons nav épisodes : plus grands, touch-friendly */
+  .w-nav-bar{padding:.4rem .6rem;gap:.3rem}
+  .w-nav-btn{font-size:.6rem;padding:10px 6px;min-height:42px;letter-spacing:.2px}
+  /* Player pleine largeur */
+  .player-frame{aspect-ratio:16/9}
+  /* Info sous player */
+  .w-info{padding:.75rem .85rem}
+  .w-title{font-size:1.25rem}
+  .w-desc{font-size:.75rem;line-height:1.7}
+  .w-grid{grid-template-columns:repeat(2,1fr);font-size:.68rem}
+  .w-hint{font-size:.6rem;padding:.3rem .7rem}
+  /* Drapeaux langue : scroll horizontal */
+  .w-lang-flags{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.2rem}
+  .w-lang-flags::-webkit-scrollbar{height:0}
+  .w-lang-flag{flex-shrink:0;padding:5px 10px;font-size:.65rem;min-height:34px}
+
+  /* === MODAL AUTH === */
+  .modal-box{margin:.8rem;padding:1.4rem;border-radius:10px}
+  .modal-input{font-size:.85rem;padding:10px 12px;min-height:44px}
+  .modal-btn{font-size:.78rem;padding:12px;min-height:46px}
+  .modal-tab{font-size:.65rem;padding:9px}
+
+  /* === TOAST === */
+  .toast{right:.6rem;left:.6rem;max-width:none;font-size:.68rem;bottom:1rem}
+
+  /* === FOOTER === */
+  .footer{padding:.9rem .85rem;flex-direction:column;align-items:flex-start;gap:.3rem}
+
+  /* === ADMIN PANEL === */
+  .adm-bar{padding:0 .7rem;gap:.4rem;flex-wrap:wrap;height:auto;min-height:50px;padding-top:.4rem;padding-bottom:.4rem}
+  .adm-bar-logo{font-size:.9rem}
+  .adm-content{padding:1rem .75rem}
+  .adm-stats{grid-template-columns:repeat(2,1fr);gap:.55rem}
+  .adm-stat{padding:.75rem}
+  .adm-stat-val{font-size:1.6rem}
+  .adm-stat-lbl{font-size:.52rem}
+  .adm-tabs{gap:0;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .adm-tabs::-webkit-scrollbar{height:0}
+  .adm-tab{white-space:nowrap;padding:10px 10px;font-size:.58rem}
+  /* Tables admin : colonnes cachées sur petits écrans */
+  .adm-table th:nth-child(3),.adm-table td:nth-child(3),
+  .adm-table th:nth-child(4),.adm-table td:nth-child(4){display:none}
+  .adm-uname{font-size:.68rem}
+  .adm-uemail{font-size:.55rem}
+  .adm-act-btn{padding:4px 7px;font-size:.52rem;min-height:30px}
+  /* Config grid */
+  .adm-config-grid{grid-template-columns:1fr}
+  /* IP grid */
+  .adm-ip-grid{grid-template-columns:1fr}
+  /* Export btn mobile */
+  .adm-export-btn span{display:none}
+  .adm-back{font-size:.6rem;padding:4px 8px}
+  /* Stats charts */
+  .adm-bar-chart{height:60px}
+  /* Visitor table : masquer colonnes extras */
+  #admPanel-visiteurs .adm-table th:nth-child(4),
+  #admPanel-visiteurs .adm-table td:nth-child(4){display:none}
+
+  /* Scroll row touch */
+  .scroll-row{-webkit-overflow-scrolling:touch;padding-bottom:.3rem}
+
+  /* Search dropdown */
+  #searchDrop{top:50px}
 }
 
 /* ══════════════ AUTH NAV BUTTON ══════════════ */
@@ -469,7 +607,7 @@ iframe.pframe{position:absolute;inset:0;width:100%;height:100%;border:none;displ
     <input type="text" placeholder="Titre, genre, année..." id="searchInput" oninput="onSearchInput(this.value)" onkeydown="onSearchKey(event)" autocomplete="off">
     <button id="searchClear" onclick="clearSearch()" style="display:none;background:none;border:none;color:var(--tx3);font-size:.85rem;padding:0 2px;cursor:pointer">✕</button>
   </div>
-  <div id="searchDrop" style="display:none;position:fixed;top:50px;left:0;right:0;z-index:998;background:#0f0f16;border-bottom:2px solid rgba(21,101,192,.3);max-height:75vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.9)">
+  <div id="searchDrop" style="display:none;position:fixed;top:50px;left:0;right:0;z-index:998;background:#0f0f16;border-bottom:2px solid rgba(21,101,192,.3);max-height:70vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 12px 40px rgba(0,0,0,.9)">
     <div id="searchDropInner"></div>
   </div>
   <div class="nav-links">
