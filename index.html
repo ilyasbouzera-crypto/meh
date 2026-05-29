@@ -332,35 +332,89 @@ iframe.pframe{position:absolute;inset:0;width:100%;height:100%;border:none;displ
   /* === FOOTER === */
   .footer{padding:.9rem .85rem;flex-direction:column;align-items:flex-start;gap:.3rem}
 
-  /* === ADMIN PANEL === */
-  .adm-bar{padding:0 .7rem;gap:.4rem;flex-wrap:wrap;height:auto;min-height:50px;padding-top:.4rem;padding-bottom:.4rem}
-  .adm-bar-logo{font-size:.9rem}
-  .adm-content{padding:1rem .75rem}
-  .adm-stats{grid-template-columns:repeat(2,1fr);gap:.55rem}
-  .adm-stat{padding:.75rem}
-  .adm-stat-val{font-size:1.6rem}
-  .adm-stat-lbl{font-size:.52rem}
-  .adm-tabs{gap:0;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:0;border-bottom:1px solid rgba(255,255,255,.06)}
-  .adm-tabs::-webkit-scrollbar{height:0}
-  .adm-tab{white-space:nowrap;padding:10px 10px;font-size:.58rem}
-  /* Tables admin : colonnes cachées sur petits écrans */
-  .adm-table th:nth-child(3),.adm-table td:nth-child(3),
-  .adm-table th:nth-child(4),.adm-table td:nth-child(4){display:none}
-  .adm-uname{font-size:.68rem}
-  .adm-uemail{font-size:.55rem}
-  .adm-act-btn{padding:4px 7px;font-size:.52rem;min-height:30px}
-  /* Config grid */
-  .adm-config-grid{grid-template-columns:1fr}
+  /* === ADMIN PANEL MOBILE — REFONTE COMPLÈTE === */
+
+  /* Barre admin */
+  .adm-bar{padding:.5rem .75rem;height:auto;min-height:50px;gap:.4rem;flex-wrap:nowrap}
+  .adm-bar-logo{font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+  .adm-bar-logo > span:last-of-type{display:none} /* masquer "Panneau Admin" */
+  .adm-bar-badge{font-size:.48rem;padding:2px 5px;flex-shrink:0}
+  .adm-bar > div:nth-child(3){display:none} /* masquer horloge */
+  .adm-export-btn{padding:6px 8px;font-size:0} /* icône seulement */
+  .adm-export-btn svg{width:14px;height:14px}
+  .adm-back{font-size:.62rem;padding:6px 10px;min-height:34px}
+
+  /* Contenu */
+  .adm-content{padding:.75rem .65rem;padding-bottom:5rem} /* padding-bottom pour la bottom nav */
+
+  /* Stats cards : 2 colonnes compactes */
+  .adm-stats{grid-template-columns:repeat(2,1fr);gap:.5rem;margin-bottom:1.2rem}
+  .adm-stat{padding:.7rem .75rem}
+  .adm-stat-val{font-size:1.5rem}
+  .adm-stat-lbl{font-size:.5rem;letter-spacing:.5px}
+  .adm-stat-sub{font-size:.47rem}
+
+  /* BOTTOM NAV fixe — remplace les tabs scrollables */
+  .adm-tabs{display:none !important} /* cacher les tabs desktop */
+  .adm-bottom-nav{display:flex !important} /* montrer la bottom nav */
+
+  /* Table → Cards stacked sur mobile */
+  /* Membres */
+  .adm-mobile-cards{display:block}
+  .adm-table-wrap{display:none}
+  /* Visitor table aussi */
+  #admPanel-visiteurs .adm-table-wrap{display:none}
+  #admPanel-visiteurs .adm-mobile-cards-vis{display:block}
+
+  /* Config grid 1 col */
+  .adm-config-grid{grid-template-columns:1fr;gap:.6rem}
+  .adm-config-card{padding:.85rem}
+  /* Inputs config plus grands */
+  .adm-config-card input[type=number]{width:100%;padding:8px 10px;font-size:.75rem;min-height:38px}
+  .adm-config-card button{width:100%;padding:9px;font-size:.62rem;min-height:38px;margin-top:.3rem}
+  .adm-config-card > button:only-of-type{width:auto}
+
   /* IP grid */
-  .adm-ip-grid{grid-template-columns:1fr}
-  /* Export btn mobile */
-  .adm-export-btn span{display:none}
-  .adm-back{font-size:.6rem;padding:4px 8px}
-  /* Stats charts */
-  .adm-bar-chart{height:60px}
-  /* Visitor table : masquer colonnes extras */
-  #admPanel-visiteurs .adm-table th:nth-child(4),
-  #admPanel-visiteurs .adm-table td:nth-child(4){display:none}
+  .adm-ip-grid{grid-template-columns:1fr;gap:.6rem}
+  .adm-ip-card{padding:.85rem}
+  .adm-ip-val{font-size:.82rem}
+
+  /* Logs */
+  .adm-log-body{max-height:55vh;-webkit-overflow-scrolling:touch}
+  .adm-log-row{padding:.5rem .75rem;gap:.55rem}
+
+  /* Annonces */
+  .adm-announce-area{min-height:80px;font-size:.78rem;padding:.6rem .8rem}
+  .adm-announce-row{flex-direction:column;align-items:stretch;gap:.5rem}
+  .adm-send-btn{width:100%;padding:11px;font-size:.72rem;min-height:42px;text-align:center;justify-content:center;display:flex;align-items:center;gap:.4rem}
+  .adm-announce-type{justify-content:stretch;gap:.3rem}
+  .adm-atype{flex:1;text-align:center;padding:7px 4px;font-size:.55rem;min-height:34px}
+
+  /* Stats tab */
+  #admPanel-stats > div{grid-template-columns:1fr !important}
+  .adm-bar-chart{height:70px}
+
+  /* Filter row */
+  .adm-filter-row{flex-wrap:wrap;gap:.4rem}
+  .adm-search{width:100%}
+  .adm-search input{width:100%}
+  .adm-add-btn{min-height:34px;font-size:.6rem}
+  .adm-flt{min-height:32px;padding:5px 10px;font-size:.58rem}
+
+  /* Section heads */
+  .adm-sec-head{margin-bottom:.7rem}
+  .adm-sec-title{font-size:.78rem}
+
+  /* Detail modal plein écran */
+  .adm-detail-overlay{align-items:flex-end}
+  .adm-detail-box{max-width:100%;border-radius:14px 14px 0 0;padding:1.2rem;max-height:85vh;overflow-y:auto}
+  .adm-detail-btn{padding:12px 8px;font-size:.65rem;min-height:44px}
+  .adm-detail-actions{gap:.4rem}
+
+  /* Toggle switch plus grand */
+  .adm-toggle-sw{width:44px;height:24px}
+  .adm-toggle-sw-slider::before{width:16px;height:16px;left:4px;bottom:4px}
+  .adm-toggle-sw input:checked+.adm-toggle-sw-slider::before{transform:translateX(20px)}
 
   /* Scroll row touch */
   .scroll-row{-webkit-overflow-scrolling:touch;padding-bottom:.3rem}
@@ -581,9 +635,88 @@ iframe.pframe{position:absolute;inset:0;width:100%;height:100%;border:none;displ
 .adm-notif-banner.info{background:rgba(21,101,192,.12);border:1px solid rgba(21,101,192,.2);color:#90caf9}
 .adm-notif-banner.warn{background:rgba(255,167,38,.08);border:1px solid rgba(255,167,38,.2);color:#ffa726}
 
-/* ══ CLICK-COPY ══ */
-.copy-tag{cursor:pointer;transition:opacity .15s;}
-.copy-tag:hover{opacity:.7}
+/* ══ ADMIN BOTTOM NAV (mobile only) ══ */
+.adm-bottom-nav{
+  display:none; /* shown only on mobile via media query */
+  position:fixed;bottom:0;left:0;right:0;z-index:2000;
+  height:56px;background:#0d0d12;
+  border-top:1px solid rgba(255,107,53,.15);
+  align-items:stretch;
+  box-shadow:0 -4px 20px rgba(0,0,0,.5);
+}
+.adm-bnav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;transition:all .15s;
+  font-size:.42rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+  color:var(--tx3);padding:0 4px;
+  border-top:2px solid transparent;
+  -webkit-tap-highlight-color:transparent;
+}
+.adm-bnav-item.on{color:#fff;border-top-color:var(--ac)}
+.adm-bnav-item:active{background:rgba(255,255,255,.05)}
+.adm-bnav-item svg{flex-shrink:0}
+.adm-bnav-badge{
+  position:absolute;top:6px;
+  background:var(--ac);color:#fff;
+  font-size:.38rem;font-weight:700;
+  min-width:14px;height:14px;
+  border-radius:7px;padding:0 3px;
+  display:flex;align-items:center;justify-content:center;
+  line-height:1;
+}
+.adm-bnav-item{position:relative}
+
+/* ══ ADMIN MEMBER CARDS (mobile) ══ */
+.adm-mobile-cards{display:none}
+.adm-mcard{
+  background:#13131a;border:1px solid rgba(255,255,255,.06);
+  border-radius:8px;padding:.85rem;margin-bottom:.55rem;
+  display:flex;align-items:center;gap:.75rem;
+  cursor:pointer;transition:background .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.adm-mcard:active{background:#1a1a24}
+.adm-mcard-avatar{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:700;color:#fff;
+}
+.adm-mcard-info{flex:1;min-width:0}
+.adm-mcard-name{font-size:.75rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-mcard-email{font-size:.58rem;color:var(--tx2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-mcard-meta{display:flex;align-items:center;gap:.35rem;margin-top:.3rem}
+.adm-mcard-date{font-size:.52rem;color:var(--tx3)}
+.adm-mcard-right{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex-shrink:0}
+.adm-mcard-actions{display:flex;gap:.3rem}
+.adm-mcard-btn{
+  padding:6px 10px;border-radius:4px;
+  font-size:.55rem;font-weight:700;letter-spacing:.3px;
+  cursor:pointer;text-transform:uppercase;
+  min-height:30px;border:1px solid;transition:all .13s;
+  -webkit-tap-highlight-color:transparent;
+}
+.adm-mcard-btn:active{opacity:.75}
+
+/* ══ ADMIN VISITOR CARDS (mobile) ══ */
+.adm-mobile-cards-vis{display:none}
+.adm-vcard{
+  background:#13131a;border:1px solid rgba(255,255,255,.06);
+  border-radius:8px;padding:.85rem;margin-bottom:.5rem;
+}
+.adm-vcard-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.adm-vcard-id{font-family:monospace;font-size:.62rem;color:var(--tx2)}
+.adm-vcard-rows{display:grid;grid-template-columns:1fr 1fr;gap:.3rem .6rem;font-size:.6rem;margin-bottom:.6rem}
+.adm-vcard-lbl{color:var(--tx3);font-size:.5rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:1px}
+.adm-vcard-val{color:#fff;font-size:.63rem;font-weight:500}
+.adm-vcard-actions{display:flex;gap:.3rem;flex-wrap:wrap}
+.adm-vcard-btn{
+  padding:7px 11px;border-radius:4px;font-size:.57rem;font-weight:700;
+  cursor:pointer;text-transform:uppercase;min-height:32px;
+  border:1px solid;transition:all .13s;
+  -webkit-tap-highlight-color:transparent;
+}
+.adm-vcard-btn:active{opacity:.75}
+
 
 @media(max-width:580px){
   .adm-stats{grid-template-columns:repeat(2,1fr)}
@@ -1740,10 +1873,13 @@ function admSwitchTab(tab){
   admCurrentTab=tab;
   document.querySelectorAll('.adm-tab').forEach(function(t){t.classList.remove('on');});
   document.querySelectorAll('.adm-tab-panel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.adm-bnav-item').forEach(function(t){t.classList.remove('on');});
   var t=document.getElementById('admtab-'+tab);
   var p=document.getElementById('admPanel-'+tab);
+  var bn=document.getElementById('admbnav-'+tab);
   if(t)t.classList.add('on');
   if(p)p.classList.add('on');
+  if(bn)bn.classList.add('on');
   if(tab==='stats')admRenderStats();
   if(tab==='ip'){admFillSessionInfo();admFillBrowserInfo();admRenderIpTable();}
   if(tab==='logs')admRenderLogs();
@@ -1806,6 +1942,44 @@ function renderAdmin(){
       +'</div></td>'
     +'</tr>';
   }).join('');
+
+  // ── MOBILE CARDS ──
+  var mc=document.getElementById('admMobileCards');
+  if(mc){
+    if(!filtered.length){
+      mc.innerHTML='<div class="adm-empty" style="padding:2rem">Aucun membre trouvé</div>';
+    } else {
+      mc.innerHTML=filtered.map(function(u){
+        var isOnline=!u.banned&&(now-u.lastActive)<86400000;
+        var status=u.banned?'banned':(isOnline?'online':'offline');
+        var statusLbl=u.banned?'Banni':(isOnline?'En ligne':'Hors ligne');
+        var banBtn=u.banned
+          ?'<button class="adm-mcard-btn" style="background:rgba(102,187,106,.08);color:#66bb6a;border-color:rgba(102,187,106,.2)" onclick="event.stopPropagation();admUnban(\''+u.id+'\')">Débannir</button>'
+          :'<button class="adm-mcard-btn" style="background:rgba(255,167,38,.08);color:#ffa726;border-color:rgba(255,167,38,.2)" onclick="event.stopPropagation();admBan(\''+u.id+'\')">Bannir</button>';
+        return '<div class="adm-mcard" onclick="admOpenDetail(\''+u.id+'\')">'
+          +'<div class="adm-mcard-avatar" style="background:'+avatarColor(u.username)+'">'+initials(u.username)+'</div>'
+          +'<div class="adm-mcard-info">'
+            +'<div class="adm-mcard-name">'+escHtml(u.username)+'</div>'
+            +'<div class="adm-mcard-email">'+escHtml(u.email)+'</div>'
+            +'<div class="adm-mcard-meta">'
+              +'<span class="adm-badge-status '+status+'" style="font-size:.45rem">'+statusLbl+'</span>'
+              +'<span class="adm-mcard-date">'+formatDate(u.lastActive)+'</span>'
+            +'</div>'
+          +'</div>'
+          +'<div class="adm-mcard-right">'
+            +'<div class="adm-mcard-actions">'+banBtn
+              +'<button class="adm-mcard-btn" style="background:rgba(239,83,80,.08);color:#ef5350;border-color:rgba(239,83,80,.2)" onclick="event.stopPropagation();admDelete(\''+u.id+'\')">✕</button>'
+            +'</div>'
+          +'</div>'
+        +'</div>';
+      }).join('');
+    }
+  }
+
+  // Sync bottom nav badge
+  var bnavB=document.getElementById('admbnav-badge-membres');
+  if(bnavB&&total>0){bnavB.style.display='flex';bnavB.textContent=total;}
+  else if(bnavB){bnavB.style.display='none';}
 }
 
 function admSetFilter(f){
@@ -1860,6 +2034,8 @@ function admLog(type,icon,msg){
   admSaveLogs(logs);
   var badge=document.getElementById('admBadgeLogs');
   if(badge)badge.textContent=logs.length;
+  var bnavBL=document.getElementById('admbnav-badge-logs');
+  if(bnavBL&&logs.length>0){bnavBL.style.display='flex';bnavBL.textContent=logs.length;}
   if(admCurrentTab==='logs')admRenderLogs();
 }
 function admRenderLogs(){
@@ -2447,6 +2623,55 @@ function admRenderVisitors(){
     +'</tr>';
   }).join('');
   admRenderBannedIps();
+
+  // ── MOBILE VISITOR CARDS ──
+  var mvc=document.getElementById('admMobileVisCards');
+  if(mvc){
+    if(!sorted.length){
+      mvc.innerHTML='<div class="adm-empty" style="padding:2rem">Aucun visiteur</div>';
+    } else {
+      mvc.innerHTML=sorted.map(function(v){
+        var isRecent=(now-v.lastSeen)<3600000;
+        var isIpBanned=v.ip&&bannedIps.includes(v.ip);
+        var status=v.banned||isIpBanned?'banned':isRecent?'online':'offline';
+        var statusLbl=v.banned||isIpBanned?'Banni':isRecent?'Récent':'Inactif';
+        var ua=v.userAgent||'';
+        var browser='?';
+        if(ua.includes('Firefox'))browser='Firefox';
+        else if(ua.includes('Edg'))browser='Edge';
+        else if(ua.includes('Chrome'))browser='Chrome';
+        else if(ua.includes('Safari'))browser='Safari';
+        var banBtn=v.banned
+          ?'<button class="adm-vcard-btn" style="background:rgba(102,187,106,.08);color:#66bb6a;border-color:rgba(102,187,106,.2)" onclick="admUnbanVisitor(\''+v.id+'\')">Débannir</button>'
+          :'<button class="adm-vcard-btn" style="background:rgba(255,167,38,.08);color:#ffa726;border-color:rgba(255,167,38,.2)" onclick="admBanVisitor(\''+v.id+'\')">Bannir</button>';
+        var ipBanBtn2=v.ip&&!bannedIps.includes(v.ip)
+          ?'<button class="adm-vcard-btn" style="background:rgba(255,87,34,.08);color:#ff7043;border-color:rgba(255,87,34,.2)" onclick="admBanIp(\''+v.ip+'\')">Ban IP</button>':'';
+        var unbanIpBtn2=v.ip&&bannedIps.includes(v.ip)
+          ?'<button class="adm-vcard-btn" style="background:rgba(102,187,106,.08);color:#66bb6a;border-color:rgba(102,187,106,.2)" onclick="admUnbanIp(\''+v.ip+'\')">Débloquer IP</button>':'';
+        return '<div class="adm-vcard">'
+          +'<div class="adm-vcard-head">'
+            +'<span class="adm-vcard-id">…'+v.id.slice(-10)+(v.isLoggedIn?' <span style="background:rgba(21,101,192,.2);color:var(--ac2);padding:1px 4px;border-radius:2px;font-size:.48rem">Membre</span>':'')+'</span>'
+            +'<span class="adm-badge-status '+status+'" style="font-size:.48rem">'+statusLbl+'</span>'
+          +'</div>'
+          +'<div class="adm-vcard-rows">'
+            +'<div><div class="adm-vcard-lbl">1ère visite</div><div class="adm-vcard-val">'+formatDate(v.firstVisit)+'</div></div>'
+            +'<div><div class="adm-vcard-lbl">Dernière activité</div><div class="adm-vcard-val">'+formatDate(v.lastSeen)+'</div></div>'
+            +'<div><div class="adm-vcard-lbl">Navigateur</div><div class="adm-vcard-val">'+browser+'</div></div>'
+            +'<div><div class="adm-vcard-lbl">IP / Pays</div><div class="adm-vcard-val">'
+              +(v.ip?'<span style="color:#ffa726;cursor:pointer;font-family:monospace;font-size:.6rem" onclick="navigator.clipboard.writeText(\''+v.ip+'\').then(function(){toast(\'Copié\',\'IP copiée !\')})">'+v.ip+'</span>'+(v.ipCountry?'<div style="font-size:.52rem;color:var(--tx2);margin-top:1px">'+escHtml(v.ipCountry)+'</div>':''):'<span style="color:var(--tx3)">—</span>')
+            +'</div></div>'
+          +'</div>'
+          +'<div class="adm-vcard-actions">'+banBtn+ipBanBtn2+unbanIpBtn2
+            +'<button class="adm-vcard-btn" style="background:rgba(239,83,80,.08);color:#ef5350;border-color:rgba(239,83,80,.2)" onclick="admDeleteVisitor(\''+v.id+'\')">✕</button>'
+          +'</div>'
+        +'</div>';
+      }).join('');
+    }
+  }
+  // Sync bottom nav badge visiteurs
+  var bnavBV=document.getElementById('admbnav-badge-visiteurs');
+  if(bnavBV&&visitors.length>0){bnavBV.style.display='flex';bnavBV.textContent=visitors.length;}
+  else if(bnavBV){bnavBV.style.display='none';}
 }
 
 function admRenderBannedIps(){
@@ -2604,6 +2829,36 @@ function escHtml(s){
 
 <!-- ══ ADMIN PANEL ══ -->
 <div id="adminPage">
+  <!-- BOTTOM NAV MOBILE -->
+  <nav class="adm-bottom-nav" id="admBottomNav">
+    <div class="adm-bnav-item on" onclick="admSwitchTab('membres')" id="admbnav-membres">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Membres
+      <span class="adm-bnav-badge" id="admbnav-badge-membres" style="display:none"></span>
+    </div>
+    <div class="adm-bnav-item" onclick="admSwitchTab('visiteurs')" id="admbnav-visiteurs">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Visiteurs
+      <span class="adm-bnav-badge" id="admbnav-badge-visiteurs" style="display:none"></span>
+    </div>
+    <div class="adm-bnav-item" onclick="admSwitchTab('logs')" id="admbnav-logs">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Logs
+      <span class="adm-bnav-badge" id="admbnav-badge-logs" style="display:none"></span>
+    </div>
+    <div class="adm-bnav-item" onclick="admSwitchTab('annonces')" id="admbnav-annonces">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
+      Annonces
+    </div>
+    <div class="adm-bnav-item" onclick="admSwitchTab('stats')" id="admbnav-stats">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Stats
+    </div>
+    <div class="adm-bnav-item" onclick="admSwitchTab('config')" id="admbnav-config">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Config
+    </div>
+  </nav>
   <div class="adm-bar">
     <div class="adm-bar-logo">ILY<span>AS</span> — <span style="font-size:.8rem;color:var(--tx2);font-family:var(--font);font-weight:400;letter-spacing:0">Panneau Admin</span></div>
     <span class="adm-bar-badge">ADMIN</span>
@@ -2711,7 +2966,7 @@ function escHtml(s){
             Actualiser
           </button>
         </div>
-        <div style="overflow-x:auto;border-radius:6px;border:1px solid rgba(255,255,255,.05)">
+        <div class="adm-table-wrap" style="overflow-x:auto;border-radius:6px;border:1px solid rgba(255,255,255,.05)">
           <table class="adm-table">
             <thead>
               <tr>
@@ -2727,6 +2982,10 @@ function escHtml(s){
               <tr><td colspan="6"><div class="adm-empty">Aucun membre inscrit pour l'instant</div></td></tr>
             </tbody>
           </table>
+        </div>
+        <!-- MOBILE CARDS -->
+        <div class="adm-mobile-cards" id="admMobileCards">
+          <div class="adm-empty" style="padding:2rem">Aucun membre inscrit</div>
         </div>
       </div>
     </div>
@@ -2872,7 +3131,7 @@ function escHtml(s){
           </button>
           <button onclick="admClearVisitors()" style="padding:4px 10px;border-radius:3px;font-size:.58rem;font-weight:700;background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.2);color:#ef5350;cursor:pointer;text-transform:uppercase;">Vider</button>
         </div>
-        <div style="overflow-x:auto;border-radius:6px;border:1px solid rgba(255,255,255,.05);margin-bottom:.8rem">
+        <div class="adm-table-wrap" style="overflow-x:auto;border-radius:6px;border:1px solid rgba(255,255,255,.05);margin-bottom:.8rem">
           <table class="adm-table">
             <thead>
               <tr>
@@ -2889,6 +3148,10 @@ function escHtml(s){
               <tr><td colspan="7"><div class="adm-empty">Aucun visiteur enregistré</div></td></tr>
             </tbody>
           </table>
+        </div>
+        <!-- MOBILE VISITOR CARDS -->
+        <div class="adm-mobile-cards-vis" id="admMobileVisCards">
+          <div class="adm-empty" style="padding:2rem">Aucun visiteur</div>
         </div>
       </div>
       <div class="adm-section">
