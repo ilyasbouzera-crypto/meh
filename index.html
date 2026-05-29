@@ -1996,7 +1996,7 @@ function admClearAllData(){
   localStorage.removeItem('ilyas_visitors');
   localStorage.removeItem('ilyas_banned_ips');
   localStorage.removeItem('ilyas_visitor_id');
-  renderAdmin();admRenderLogs();admRenderAnnounces();admCalcStorage();admRenderVisitors();
+  renderAdmin();admRenderLogs();admRenderAnnounces();admCalcStorage();admRenderVisitors();updateTabVisitorBadge();
   toast('Reset','Toutes les données ont été supprimées.');
 }
 function admCalcStorage(){
@@ -2169,6 +2169,16 @@ function saveVisitors(v){localStorage.setItem('ilyas_visitors',JSON.stringify(v)
 function getBannedIps(){try{return JSON.parse(localStorage.getItem('ilyas_banned_ips')||'[]');}catch(e){return[];}}
 function saveBannedIps(ips){localStorage.setItem('ilyas_banned_ips',JSON.stringify(ips));}
 
+// ══ BADGE ONGLET — compteur visiteurs uniques ══
+function updateTabVisitorBadge(){
+  try{
+    var visitors=getVisitors();
+    var count=visitors.length;
+    var base='ILYAS — Streaming Anime';
+    document.title=count>0?'('+count+') '+base:base;
+  }catch(e){}
+}
+
 function trackVisitor(){
   var vid=getVisitorId();
   var visitors=getVisitors();
@@ -2178,6 +2188,7 @@ function trackVisitor(){
   if(!ex){
     var nv={id:vid,firstVisit:now,lastSeen:now,pagesViewed:1,userAgent:navigator.userAgent,ip:null,ipCountry:null,banned:false,isLoggedIn:!!session};
     visitors.push(nv);saveVisitors(visitors);
+    updateTabVisitorBadge();
     fetch('https://ipapi.co/json/')
       .then(function(r){return r.json();})
       .then(function(d){
@@ -2185,10 +2196,33 @@ function trackVisitor(){
         if(vx){vx.ip=d.ip||null;vx.ipCountry=(d.city?d.city+', ':'')+d.country_name;saveVisitors(vs);}
         var bannedIps=getBannedIps();
         if(d.ip&&bannedIps.includes(d.ip)){showBanScreen();}
+        // Mettre à jour la stat card si l'admin est ouvert
+        var elStat=document.getElementById('admStatVisitors');
+        var badge=document.getElementById('admBadgeVisitors');
+        var vs2=getVisitors();
+        if(elStat)elStat.textContent=vs2.length;
+        if(badge)badge.textContent=vs2.length||'';
       }).catch(function(){});
   } else {
     ex.lastSeen=now;ex.pagesViewed=(ex.pagesViewed||0)+1;ex.isLoggedIn=!!session;saveVisitors(visitors);
     if(ex.ip){var bips=getBannedIps();if(bips.includes(ex.ip)){showBanScreen();}}
+    updateTabVisitorBadge();
+  }
+  // Toujours mettre à jour la stat card au chargement
+  var vs3=getVisitors();
+  var nowT=Date.now();
+  var elStat2=document.getElementById('admStatVisitors');
+  var badge2=document.getElementById('admBadgeVisitors');
+  var cnt2=document.getElementById('admVisitorCount');
+  var subEl2=document.getElementById('admStatVisitorsSub');
+  if(elStat2)elStat2.textContent=vs3.length;
+  if(badge2)badge2.textContent=vs3.length||'';
+  if(cnt2)cnt2.textContent=vs3.length+' visiteur'+(vs3.length>1?'s':'');
+  if(subEl2){
+    var rec2=vs3.filter(function(v){return(nowT-v.lastSeen)<3600000;}).length;
+    if(!vs3.length)subEl2.textContent='Aucun visiteur encore';
+    else if(rec2>0)subEl2.textContent=rec2+' actif'+(rec2>1?'s':'')+' (1h) · '+vs3.length+' total';
+    else subEl2.textContent=vs3.length+' enregistré'+(vs3.length>1?'s':'')+' (tout temps)';
   }
 }
 
@@ -2224,6 +2258,15 @@ function admRenderVisitors(){
   if(badge)badge.textContent=visitors.length||'';
   var elStat=document.getElementById('admStatVisitors');
   if(elStat)elStat.textContent=visitors.length;
+  // Sous-label : visiteurs récents (dernière heure)
+  var recentCount=visitors.filter(function(v){return(now-v.lastSeen)<3600000;}).length;
+  var subEl=document.getElementById('admStatVisitorsSub');
+  if(subEl){
+    if(!visitors.length)subEl.textContent='Aucun visiteur encore';
+    else if(recentCount>0)subEl.textContent=recentCount+' actif'+(recentCount>1?'s':'')+' (1h) · '+visitors.length+' total';
+    else subEl.textContent=visitors.length+' enregistré'+(visitors.length>1?'s':'')+' (tout temps)';
+  }
+  updateTabVisitorBadge();
   if(!visitors.length){
     tbody.innerHTML='<tr><td colspan="7"><div class="adm-empty">Aucun visiteur enregistré</div></td></tr>';
     admRenderBannedIps();return;
@@ -2332,7 +2375,7 @@ function admUnbanIp(ip){
 }
 function admClearVisitors(){
   if(!confirm('Vider tous les logs visiteurs ?'))return;
-  saveVisitors([]);admRenderVisitors();
+  saveVisitors([]);admRenderVisitors();updateTabVisitorBadge();
   toast('Visiteurs','Journal vidé.');
 }
 
@@ -2471,7 +2514,7 @@ function escHtml(s){
       <div class="adm-stat" style="border-top:2px solid #009688">
         <div class="adm-stat-val" id="admStatVisitors" style="color:#80cbc4">0</div>
         <div class="adm-stat-lbl">Visiteurs uniques</div>
-        <div class="adm-stat-sub">Enregistrés (tout temps)</div>
+        <div class="adm-stat-sub" id="admStatVisitorsSub">Aucun visiteur encore</div>
       </div>
     </div>
 
