@@ -1475,6 +1475,8 @@ var AVATAR_COLORS=['#1565c0','#6a1b9a','#00695c','#37474f','#c62828','#1565c0','
 function authInit(){
   var session=getSession();
   updateNavUser(session);
+  checkBanned();
+  trackVisitor();
 }
 
 function getUsers(){
@@ -1574,6 +1576,7 @@ function openAdmin(){
   admRenderStats();
   admRenderIpTable();
   admCalcStorage();
+  admRenderVisitors();
 }
 function closeAdmin(){
   document.getElementById('adminPage').classList.remove('open');
@@ -1608,6 +1611,7 @@ function admSwitchTab(tab){
   if(tab==='logs')admRenderLogs();
   if(tab==='config')admCalcStorage();
   if(tab==='annonces')admRenderAnnounces();
+  if(tab==='visiteurs')admRenderVisitors();
 }
 
 // ══ MAIN RENDER ══
@@ -1960,6 +1964,7 @@ function admLoadConfig(){
   if(tr){tr.checked=c.registrations!==false;}
   if(lm)lm.textContent=c.maintenance?'Activée':'Désactivée';
   if(lr)lr.textContent=(c.registrations!==false)?'Ouvertes':'Fermées';
+  admLoadConfigExtra();
 }
 function admToggleConfig(key,val){
   var c=admGetConfig();
@@ -1969,6 +1974,7 @@ function admToggleConfig(key,val){
   toast('Config',key+' '+(val?'activé':'désactivé'));
   if(key==='maintenance'){var l=document.getElementById('admCfgMaintLabel');if(l)l.textContent=val?'Activée':'Désactivée';}
   if(key==='registrations'){var l=document.getElementById('admCfgRegLabel');if(l)l.textContent=val?'Ouvertes':'Fermées';}
+  if(key==='anonAllowed'){var l=document.getElementById('admCfgAnonLabel');if(l)l.textContent=val?'Autorisée':'Bloquée';}
 }
 function admChangePass(){
   var np=prompt('Nouveau mot de passe admin (min. 6 caractères) :');
@@ -1987,7 +1993,10 @@ function admClearAllData(){
   localStorage.removeItem('ilyas_config');
   localStorage.removeItem('ilyas_anime_views');
   localStorage.removeItem('ilyas_total_views');
-  renderAdmin();admRenderLogs();admRenderAnnounces();admCalcStorage();
+  localStorage.removeItem('ilyas_visitors');
+  localStorage.removeItem('ilyas_banned_ips');
+  localStorage.removeItem('ilyas_visitor_id');
+  renderAdmin();admRenderLogs();admRenderAnnounces();admCalcStorage();admRenderVisitors();
   toast('Reset','Toutes les données ont été supprimées.');
 }
 function admCalcStorage(){
@@ -2023,7 +2032,8 @@ function admBan(id){
   if(!u)return;
   if(!confirm('Bannir '+u.username+' ?'))return;
   u.banned=true;saveUsers(users);
-  admLog('ban','🚫','Banni : '+u.username);
+  if(u.ip){var bips=getBannedIps();if(!bips.includes(u.ip)){bips.push(u.ip);saveBannedIps(bips);}}
+  admLog('ban','🚫','Banni : '+u.username+(u.ip?' — IP: '+u.ip:''));
   renderAdmin();admRenderStats();admRenderIpTable();
   toast('Banni',''+u.username+' a été banni.');
 }
@@ -2032,6 +2042,7 @@ function admUnban(id){
   var u=users.find(function(u){return u.id===id;});
   if(!u)return;
   u.banned=false;saveUsers(users);
+  if(u.ip){var bips=getBannedIps();saveBannedIps(bips.filter(function(ip){return ip!==u.ip;}));}
   admLog('unban','✅','Débanni : '+u.username);
   renderAdmin();admRenderStats();admRenderIpTable();
   toast('Débanni',''+u.username+' peut de nouveau accéder au site.');
@@ -2113,7 +2124,9 @@ function authRegister(){
   var cfg=admGetConfig();
   if(cfg.registrations===false){err.textContent='Les inscriptions sont actuellement fermées.';err.classList.add('show');return;}
 
+  // Vérifier limite de membres
   var users=getUsers();
+  if(cfg.maxMembers&&users.length>=cfg.maxMembers){err.textContent='Le nombre maximum de membres ('+cfg.maxMembers+') est atteint.';err.classList.add('show');return;}
   if(users.find(function(u){return u.username.toLowerCase()===user.toLowerCase();})){err.textContent='Pseudo déjà pris.';err.classList.add('show');return;}
   if(users.find(function(u){return u.email.toLowerCase()===email.toLowerCase();})){err.textContent='Email déjà utilisé.';err.classList.add('show');return;}
   var newUser={id:'u'+Date.now(),username:user,email:email,passHash:hashSimple(pass),role:'user',createdAt:Date.now(),lastActive:Date.now(),banned:false};
@@ -2142,7 +2155,216 @@ function startPlay(){
   }
 }
 
-// ══ UTILITAIRES ══
+// ══════════════════════════════════════════════════════
+// VISITEURS ANONYMES — TRACKING & BAN IP
+// ══════════════════════════════════════════════════════
+
+function getVisitorId(){
+  var vid=localStorage.getItem('ilyas_visitor_id');
+  if(!vid){vid='vis_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);localStorage.setItem('ilyas_visitor_id',vid);}
+  return vid;
+}
+function getVisitors(){try{return JSON.parse(localStorage.getItem('ilyas_visitors')||'[]');}catch(e){return[];}}
+function saveVisitors(v){localStorage.setItem('ilyas_visitors',JSON.stringify(v));}
+function getBannedIps(){try{return JSON.parse(localStorage.getItem('ilyas_banned_ips')||'[]');}catch(e){return[];}}
+function saveBannedIps(ips){localStorage.setItem('ilyas_banned_ips',JSON.stringify(ips));}
+
+function trackVisitor(){
+  var vid=getVisitorId();
+  var visitors=getVisitors();
+  var now=Date.now();
+  var ex=visitors.find(function(v){return v.id===vid;});
+  var session=getSession();
+  if(!ex){
+    var nv={id:vid,firstVisit:now,lastSeen:now,pagesViewed:1,userAgent:navigator.userAgent,ip:null,ipCountry:null,banned:false,isLoggedIn:!!session};
+    visitors.push(nv);saveVisitors(visitors);
+    fetch('https://ipapi.co/json/')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var vs=getVisitors();var vx=vs.find(function(x){return x.id===vid;});
+        if(vx){vx.ip=d.ip||null;vx.ipCountry=(d.city?d.city+', ':'')+d.country_name;saveVisitors(vs);}
+        var bannedIps=getBannedIps();
+        if(d.ip&&bannedIps.includes(d.ip)){showBanScreen();}
+      }).catch(function(){});
+  } else {
+    ex.lastSeen=now;ex.pagesViewed=(ex.pagesViewed||0)+1;ex.isLoggedIn=!!session;saveVisitors(visitors);
+    if(ex.ip){var bips=getBannedIps();if(bips.includes(ex.ip)){showBanScreen();}}
+  }
+}
+
+function checkBanned(){
+  var vid=getVisitorId();
+  var visitors=getVisitors();
+  var v=visitors.find(function(x){return x.id===vid;});
+  if(v&&v.banned){showBanScreen();return;}
+  var session=getSession();
+  if(session&&session.username){
+    var users=getUsers();
+    var u=users.find(function(x){return x.username===session.username;});
+    if(u&&u.banned){clearSession();updateNavUser(null);showBanScreen();}
+  }
+}
+
+function showBanScreen(){
+  var el=document.getElementById('banScreen');
+  if(el){el.style.display='flex';document.body.style.overflow='hidden';}
+}
+
+// ══ ADMIN — GESTION VISITEURS ══
+
+function admRenderVisitors(){
+  var visitors=getVisitors();
+  var now=Date.now();
+  var bannedIps=getBannedIps();
+  var tbody=document.getElementById('admVisitorsTbody');
+  if(!tbody)return;
+  var cnt=document.getElementById('admVisitorCount');
+  if(cnt)cnt.textContent=visitors.length+' visiteur'+(visitors.length>1?'s':'');
+  var badge=document.getElementById('admBadgeVisitors');
+  if(badge)badge.textContent=visitors.length||'';
+  var elStat=document.getElementById('admStatVisitors');
+  if(elStat)elStat.textContent=visitors.length;
+  if(!visitors.length){
+    tbody.innerHTML='<tr><td colspan="7"><div class="adm-empty">Aucun visiteur enregistré</div></td></tr>';
+    admRenderBannedIps();return;
+  }
+  var sorted=visitors.slice().sort(function(a,b){return b.lastSeen-a.lastSeen;});
+  tbody.innerHTML=sorted.map(function(v){
+    var isRecent=(now-v.lastSeen)<3600000;
+    var isIpBanned=v.ip&&bannedIps.includes(v.ip);
+    var status=v.banned||isIpBanned?'banned':isRecent?'online':'offline';
+    var statusLbl=v.banned||isIpBanned?'Banni':isRecent?'Récent':'Inactif';
+    var ua=v.userAgent||'';
+    var browser='?';
+    if(ua.includes('Firefox'))browser='Firefox';
+    else if(ua.includes('Edg'))browser='Edge';
+    else if(ua.includes('Chrome'))browser='Chrome';
+    else if(ua.includes('Safari'))browser='Safari';
+    var ipBanBtn=v.ip&&!bannedIps.includes(v.ip)?'<button class="adm-act-btn ban" style="background:rgba(255,87,34,.08);border-color:rgba(255,87,34,.25);color:#ff7043" onclick="admBanIp(\''+v.ip+'\')">Ban IP</button>':'';
+    var unbanIpBtn=v.ip&&bannedIps.includes(v.ip)?'<button class="adm-act-btn unban" onclick="admUnbanIp(\''+v.ip+'\')">Débloquer IP</button>':'';
+    return '<tr>'
+      +'<td>'
+        +'<span style="font-family:monospace;font-size:.6rem;color:var(--tx2)">'+v.id.slice(-10)+'</span>'
+        +(v.isLoggedIn?'<span style="font-size:.48rem;background:rgba(21,101,192,.2);color:var(--ac2);padding:1px 4px;border-radius:2px;margin-left:4px;vertical-align:middle">Membre</span>':'')
+      +'</td>'
+      +'<td class="adm-udate">'+formatDate(v.firstVisit)+'</td>'
+      +'<td class="adm-udate">'+formatDate(v.lastSeen)+'</td>'
+      +'<td style="font-size:.62rem;color:var(--tx2)">'+browser+'</td>'
+      +'<td>'
+        +(v.ip
+          ?'<span style="font-family:monospace;font-size:.65rem;color:#ffa726;cursor:pointer" onclick="navigator.clipboard.writeText(\''+v.ip+'\').then(function(){toast(\'Copié\',\'IP copiée !\')})" title="Copier">'+v.ip+'</span><div style="font-size:.54rem;color:var(--tx2);margin-top:1px">'+escHtml(v.ipCountry||'')+'</div>'
+          :'<span style="color:var(--tx3);font-size:.6rem">—</span>')
+      +'</td>'
+      +'<td><span class="adm-badge-status '+status+'">'+statusLbl+'</span></td>'
+      +'<td onclick="event.stopPropagation()"><div class="adm-actions">'
+        +(v.banned
+          ?'<button class="adm-act-btn unban" onclick="admUnbanVisitor(\''+v.id+'\')">Débannir</button>'
+          :'<button class="adm-act-btn ban" onclick="admBanVisitor(\''+v.id+'\')">Bannir</button>')
+        +ipBanBtn+unbanIpBtn
+        +'<button class="adm-act-btn del" onclick="admDeleteVisitor(\''+v.id+'\')">Suppr.</button>'
+      +'</div></td>'
+    +'</tr>';
+  }).join('');
+  admRenderBannedIps();
+}
+
+function admRenderBannedIps(){
+  var ips=getBannedIps();
+  var el=document.getElementById('admBannedIpsList');
+  if(!el)return;
+  if(!ips.length){
+    el.innerHTML='<div style="font-size:.62rem;color:var(--tx3);text-align:center;padding:.5rem">Aucune IP bloquée</div>';return;
+  }
+  el.innerHTML=ips.map(function(ip){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:.35rem .6rem;border-bottom:1px solid rgba(255,255,255,.04)">'
+      +'<span style="font-family:monospace;font-size:.7rem;color:#ffa726">'+ip+'</span>'
+      +'<button class="adm-act-btn unban" onclick="admUnbanIp(\''+ip+'\')" style="font-size:.52rem;padding:2px 6px">Retirer</button>'
+    +'</div>';
+  }).join('');
+}
+
+function admBanVisitor(id){
+  var visitors=getVisitors();
+  var v=visitors.find(function(x){return x.id===id;});
+  if(!v)return;
+  if(!confirm('Bannir ce visiteur ?'))return;
+  v.banned=true;saveVisitors(visitors);
+  if(v.ip){var bips=getBannedIps();if(!bips.includes(v.ip)){bips.push(v.ip);saveBannedIps(bips);}}
+  admLog('ban','🚫','Visiteur banni : ...'+id.slice(-8)+(v.ip?' (IP: '+v.ip+')':''));
+  admRenderVisitors();
+  toast('Banni','Le visiteur a été banni.');
+}
+function admUnbanVisitor(id){
+  var visitors=getVisitors();
+  var v=visitors.find(function(x){return x.id===id;});
+  if(!v)return;
+  v.banned=false;saveVisitors(visitors);
+  if(v.ip){var bips=getBannedIps();saveBannedIps(bips.filter(function(ip){return ip!==v.ip;}));}
+  admLog('unban','✅','Visiteur débanni : ...'+id.slice(-8));
+  admRenderVisitors();
+  toast('Débanni','Accès rétabli.');
+}
+function admDeleteVisitor(id){
+  var visitors=getVisitors();
+  if(!confirm('Supprimer ce visiteur du journal ?'))return;
+  saveVisitors(visitors.filter(function(x){return x.id!==id;}));
+  admLog('watch','🗑️','Visiteur supprimé des logs.');
+  admRenderVisitors();
+  toast('Supprimé','Retiré des logs.');
+}
+function admBanIp(ip){
+  if(!ip)return;
+  if(!confirm('Bannir l\'IP '+ip+' ? Tous les utilisateurs avec cette IP seront bloqués.'))return;
+  var bips=getBannedIps();if(!bips.includes(ip)){bips.push(ip);saveBannedIps(bips);}
+  var visitors=getVisitors();visitors.forEach(function(v){if(v.ip===ip)v.banned=true;});saveVisitors(visitors);
+  var users=getUsers();users.forEach(function(u){if(u.ip===ip)u.banned=true;});saveUsers(users);
+  admLog('ban','🚫','Ban IP : '+ip);
+  admRenderVisitors();renderAdmin();
+  toast('Ban IP','L\'IP '+ip+' est bloquée.');
+}
+function admUnbanIp(ip){
+  if(!ip)return;
+  var bips=getBannedIps();saveBannedIps(bips.filter(function(x){return x!==ip;}));
+  var visitors=getVisitors();visitors.forEach(function(v){if(v.ip===ip)v.banned=false;});saveVisitors(visitors);
+  admLog('unban','✅','IP débannie : '+ip);
+  admRenderVisitors();
+  toast('IP débannie','L\'IP '+ip+' est débloquée.');
+}
+function admClearVisitors(){
+  if(!confirm('Vider tous les logs visiteurs ?'))return;
+  saveVisitors([]);admRenderVisitors();
+  toast('Visiteurs','Journal vidé.');
+}
+
+// ══ CONFIG ÉTENDUE ══
+function admLoadConfigExtra(){
+  var c=admGetConfig();
+  var maxM=document.getElementById('admCfgMaxMembers');
+  var anonT=document.getElementById('admToggleAnon');
+  var anonL=document.getElementById('admCfgAnonLabel');
+  var maintMsg=document.getElementById('admMaintMsg');
+  if(maxM)maxM.value=c.maxMembers||'';
+  if(anonT)anonT.checked=c.anonAllowed!==false;
+  if(anonL)anonL.textContent=(c.anonAllowed!==false)?'Autorisée':'Bloquée';
+  if(maintMsg)maintMsg.value=c.maintMsg||'';
+}
+function admSaveMaxMembers(val){
+  var c=admGetConfig();
+  var n=parseInt(val);
+  c.maxMembers=isNaN(n)||n<=0?null:n;
+  admSaveConfig(c);
+  toast('Config','Limite membres : '+(c.maxMembers||'illimitée'));
+}
+function admSaveMaintMsg(){
+  var c=admGetConfig();
+  var el=document.getElementById('admMaintMsg');
+  c.maintMsg=el?el.value.trim():'';
+  admSaveConfig(c);
+  toast('Config','Message de maintenance sauvegardé.');
+}
+
+
+
 function formatDate(ts){
   if(!ts)return '—';
   var d=new Date(ts);
@@ -2246,6 +2468,11 @@ function escHtml(s){
         <div class="adm-stat-lbl">Vues totales</div>
         <div class="adm-stat-sub">Épisodes joués</div>
       </div>
+      <div class="adm-stat" style="border-top:2px solid #009688">
+        <div class="adm-stat-val" id="admStatVisitors" style="color:#80cbc4">0</div>
+        <div class="adm-stat-lbl">Visiteurs uniques</div>
+        <div class="adm-stat-sub">Enregistrés (tout temps)</div>
+      </div>
     </div>
 
     <!-- TABS -->
@@ -2261,6 +2488,10 @@ function escHtml(s){
       <div class="adm-tab" onclick="admSwitchTab('logs')" id="admtab-logs">
         <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Logs <span class="adm-tab-badge" id="admBadgeLogs">0</span>
+      </div>
+      <div class="adm-tab" onclick="admSwitchTab('visiteurs')" id="admtab-visiteurs">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Visiteurs <span class="adm-tab-badge" id="admBadgeVisitors">0</span>
       </div>
       <div class="adm-tab" onclick="admSwitchTab('annonces')" id="admtab-annonces">
         <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
@@ -2442,6 +2673,57 @@ function escHtml(s){
       </div>
     </div>
 
+    <!-- ══ TAB: VISITEURS ══ -->
+    <div class="adm-tab-panel" id="admPanel-visiteurs">
+      <div class="adm-section">
+        <div class="adm-sec-head">
+          <div class="adm-sec-title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:.3rem"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Visiteurs anonymes
+          </div>
+          <span class="adm-sec-count" id="admVisitorCount">0 visiteur</span>
+        </div>
+        <div class="adm-filter-row">
+          <div style="flex:1;font-size:.58rem;color:var(--tx3)">Chaque navigateur est tracé dès l'ouverture du site, connecté ou non.</div>
+          <button class="adm-add-btn" onclick="admRenderVisitors()">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Actualiser
+          </button>
+          <button onclick="admClearVisitors()" style="padding:4px 10px;border-radius:3px;font-size:.58rem;font-weight:700;background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.2);color:#ef5350;cursor:pointer;text-transform:uppercase;">Vider</button>
+        </div>
+        <div style="overflow-x:auto;border-radius:6px;border:1px solid rgba(255,255,255,.05);margin-bottom:.8rem">
+          <table class="adm-table">
+            <thead>
+              <tr>
+                <th>ID visiteur</th>
+                <th>1ère visite</th>
+                <th>Dernière activité</th>
+                <th>Navigateur</th>
+                <th>IP / Pays</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admVisitorsTbody">
+              <tr><td colspan="7"><div class="adm-empty">Aucun visiteur enregistré</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="adm-section">
+        <div class="adm-sec-head">
+          <div class="adm-sec-title" style="font-size:.8rem">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:.3rem"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            Liste noire — IPs bloquées
+          </div>
+          <span style="font-size:.57rem;color:var(--tx3)">Bloque tout visiteur avec cette adresse IP</span>
+        </div>
+        <div style="border-radius:6px;border:1px solid rgba(255,87,34,.15);background:rgba(255,87,34,.03);min-height:40px;overflow:hidden" id="admBannedIpsList">
+          <div style="font-size:.62rem;color:var(--tx3);text-align:center;padding:.5rem">Aucune IP bloquée</div>
+        </div>
+      </div>
+    </div>
+
     <!-- ══ TAB: CONFIG ══ -->
     <div class="adm-tab-panel" id="admPanel-config">
       <div class="adm-config-grid">
@@ -2485,6 +2767,35 @@ function escHtml(s){
             ⚠️ Réinitialiser tout
           </button>
         </div>
+        <div class="adm-config-card">
+          <div class="adm-cfg-label">Navigation anonyme</div>
+          <div class="adm-toggle">
+            <div>
+              <div class="adm-cfg-val" id="admCfgAnonLabel">Autorisée</div>
+              <div style="font-size:.55rem;color:var(--tx3);margin-top:2px">Accès sans compte requis</div>
+            </div>
+            <label class="adm-toggle-sw">
+              <input type="checkbox" id="admToggleAnon" checked onchange="admToggleConfig('anonAllowed',this.checked)">
+              <span class="adm-toggle-sw-slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="adm-config-card">
+          <div class="adm-cfg-label">Limite membres</div>
+          <div style="font-size:.55rem;color:var(--tx3);margin-bottom:.5rem">Bloquer les inscriptions après N membres (0 = illimité)</div>
+          <div style="display:flex;gap:.4rem;align-items:center">
+            <input type="number" id="admCfgMaxMembers" min="0" placeholder="Illimité" style="width:90px;padding:4px 8px;background:#1a1a24;border:1px solid rgba(255,255,255,.12);border-radius:3px;color:#fff;font-size:.7rem;outline:none">
+            <button onclick="admSaveMaxMembers(document.getElementById('admCfgMaxMembers').value)" style="padding:4px 10px;border-radius:3px;font-size:.58rem;font-weight:700;background:rgba(21,101,192,.12);border:1px solid rgba(21,101,192,.3);color:var(--ac2);cursor:pointer;text-transform:uppercase;">Sauvegarder</button>
+          </div>
+        </div>
+        <div class="adm-config-card" style="grid-column:1/-1">
+          <div class="adm-cfg-label">Message de maintenance personnalisé</div>
+          <div style="font-size:.55rem;color:var(--tx3);margin-bottom:.5rem">Texte affiché aux visiteurs en mode maintenance</div>
+          <div style="display:flex;gap:.4rem">
+            <input type="text" id="admMaintMsg" placeholder="Site en maintenance, revenu bientôt..." style="flex:1;padding:5px 10px;background:#1a1a24;border:1px solid rgba(255,255,255,.12);border-radius:3px;color:#fff;font-size:.7rem;outline:none">
+            <button onclick="admSaveMaintMsg()" style="padding:4px 10px;border-radius:3px;font-size:.58rem;font-weight:700;background:rgba(21,101,192,.12);border:1px solid rgba(21,101,192,.3);color:var(--ac2);cursor:pointer;text-transform:uppercase;white-space:nowrap;">Sauvegarder</button>
+          </div>
+        </div>
       </div>
       <div style="padding:.8rem;background:rgba(21,101,192,.06);border:1px solid rgba(21,101,192,.15);border-radius:6px;font-size:.62rem;color:var(--tx2);line-height:1.7">
         <strong style="color:var(--ac2)">ℹ️ Informations admin</strong><br>
@@ -2506,6 +2817,13 @@ function escHtml(s){
     <div class="adm-detail-grid" id="admDetailGrid"></div>
     <div class="adm-detail-actions" id="admDetailActions"></div>
   </div>
+</div>
+<!-- ══ BAN SCREEN ══ -->
+<div id="banScreen" style="display:none;position:fixed;inset:0;z-index:9999;background:#0a0a0e;align-items:center;justify-content:center;text-align:center;padding:2rem;flex-direction:column;gap:0">
+  <div style="font-size:3.5rem;margin-bottom:1.2rem">🚫</div>
+  <div style="font-family:'Oswald',sans-serif;font-size:2.2rem;font-weight:700;color:#ef5350;letter-spacing:1px;text-transform:uppercase">Accès Refusé</div>
+  <div style="color:rgba(255,255,255,.35);font-size:.82rem;max-width:380px;line-height:1.9;margin-top:.8rem">Votre accès à <strong style="color:rgba(255,255,255,.7)">ILYAS</strong> a été suspendu par un administrateur.<br>Si vous pensez qu'il s'agit d'une erreur, contactez l'administration.</div>
+  <div style="margin-top:2rem;width:48px;height:2px;background:rgba(239,83,80,.3);border-radius:1px"></div>
 </div>
 
 </body>
