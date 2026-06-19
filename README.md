@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plombier Rennes – Mehdi Bouzera | Urgence 24h/24 – Intervention en 1h</title>
+<meta name="description" content="Plombier urgence Rennes disponible maintenant. Fuite, débouchage, chauffe-eau. Devis gratuit. Mehdi intervient en moins d'1h. Appelez maintenant !">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #050d1a;
+  --navy2: #0a1728;
+  --blue: #1a46c4;
+  --blue2: #2155d8;
+  --sky: #3b82f6;
+  --water: #60a5fa;
+  --green: #15803d;
+  --green2: #22c55e;
+  --green3: #4ade80;
+  --orange: #ea580c;
+  --white: #ffffff;
+  --off: #f1f5fb;
+  --gray: #dde4ef;
+  --muted: #5a6a80;
+  --text: #1a2540;
+  --red: #dc2626;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body { font-family:'DM Sans',sans-serif; background:var(--white); color:var(--text); overflow-x:hidden; }
+img { max-width:100%; display:block; }
+a { color:inherit; text-decoration:none; }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--navy); }
+::-webkit-scrollbar-thumb { background:var(--blue2); border-radius:4px; }
+
+/* ===== TOP URGENCY BAR ===== */
+.top-bar {
+  background: linear-gradient(90deg, #b91c1c, #dc2626, #b91c1c);
+  background-size: 200% auto;
+  animation: barFlow 3s linear infinite;
+  color:#fff; text-align:center;
+  padding: 9px 5%;
+  font-size:0.82rem; font-weight:600;
+  letter-spacing:0.3px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  flex-wrap:wrap; position:relative; z-index:1000;
+}
+@keyframes barFlow { 0%{background-position:0%} 100%{background-position:200%} }
+.top-bar .blink { animation:blink 1s infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.top-bar a { color:#fde68a; font-weight:700; text-decoration:underline; text-underline-offset:2px; }
+
+/* ===== HEADER ===== */
+header {
+  position:sticky; top:0; z-index:999;
+  background:rgba(5,13,26,0.97);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  padding:0 5%; height:62px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition: box-shadow 0.3s;
+}
+header.scrolled { box-shadow:0 4px 32px rgba(0,0,0,0.5); }
+.logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.15rem; color:#fff; line-height:1.2; }
+.logo span { color:var(--water); }
+.logo small { display:block; font-size:0.55rem; color:rgba(255,255,255,0.3); letter-spacing:2.5px; text-transform:uppercase; }
+.header-right { display:flex; align-items:center; gap:16px; }
+.header-tel { color:var(--water); font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:5px; }
+.btn-header {
+  background:var(--green); color:#fff;
+  padding:9px 18px; border-radius:7px;
+  font-weight:700; font-size:0.82rem;
+  display:flex; align-items:center; gap:6px;
+  white-space:nowrap; transition:background 0.2s;
+  animation:pulseGreen 2.5s infinite;
+}
+@keyframes pulseGreen{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.5)}60%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
+.btn-header:hover { background:#166534; }
+/* Hide tel text on small screens, keep button */
+@media(max-width:480px){
+  .header-tel { display:none; }
+  .btn-header .btn-txt { display:none; }
+  .btn-header { padding:9px 14px; font-size:1.1rem; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  position:relative; overflow:hidden;
+  background:var(--navy);
+  min-height:100svh;
+  display:flex; flex-direction:column;
+}
+/* Background image behind everything */
+.hero-bg {
+  position:absolute; inset:0;
+  z-index:0;
+}
+.hero-bg img {
+  width:100%; height:100%; object-fit:cover; object-position:center right;
+  opacity:0.45;
+}
+/* Blue gradient overlay */
+.hero-bg::after {
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(120deg, var(--navy) 50%, rgba(5,13,26,0.6) 100%);
+}
+/* Decorative shapes */
+.hero-decor {
+  position:absolute; z-index:1;
+  pointer-events:none;
+}
+.hero-decor-circle {
+  width:600px; height:600px; border-radius:50%;
+  background: radial-gradient(circle, rgba(29,70,196,0.12) 0%, transparent 70%);
+  bottom:-200px; right:-100px;
+}
+.hero-decor-line {
+  width:1px; height:80px;
+  background: linear-gradient(180deg, transparent, rgba(96,165,250,0.5), transparent);
+  top:20%; left:60%;
+}
+
+.hero-content {
+  position:relative; z-index:2;
+  flex:1; display:flex; align-items:center;
+  padding: 80px 6% 60px;
+  max-width:780px;
+}
+.hero-inner { width:100%; }
+
+/* Live tag */
+.live-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(22,163,74,0.15); border:1px solid rgba(34,197,94,0.35);
+  color:var(--green3); padding:6px 16px; border-radius:50px;
+  font-size:0.7rem; font-weight:700; letter-spacing:1.8px; text-transform:uppercase;
+  margin-bottom:22px; opacity:0;
+  animation:fadeUp 0.5s 0.1s forwards;
+}
+.live-dot { width:8px;height:8px;background:var(--green3);border-radius:50%;box-shadow:0 0 10px var(--green3);animation:livePulse 1.2s infinite; }
+@keyframes livePulse{0%,100%{transform:scale(1)}50%{transform:scale(0.5);opacity:0.4}}
+
+h1 {
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.8rem,6vw,4.5rem);
+  font-weight:800; line-height:1.02; letter-spacing:-2px;
+  color:var(--white);
+  opacity:0; animation:fadeUp 0.6s 0.2s forwards;
+}
+h1 .accent { color:var(--water); }
+h1 .highlight {
+  background: linear-gradient(135deg, var(--green2) 0%, var(--green3) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-promise {
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  margin:20px 0 24px;
+  opacity:0; animation:fadeUp 0.6s 0.3s forwards;
+}
+.promise-pill {
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.75); padding:5px 13px; border-radius:50px;
+  font-size:0.76rem; font-weight:500;
+  display:flex; align-items:center; gap:5px;
+}
+.promise-pill .ck { color:var(--green2); }
+
+.hero-sub {
+  font-size:1rem; color:rgba(255,255,255,0.55); font-weight:300; line-height:1.75;
+  max-width:480px; margin-bottom:32px;
+  opacity:0; animation:fadeUp 0.6s 0.35s forwards;
+}
+
+/* BIG CTA */
+.cta-zone { opacity:0; animation:fadeUp 0.6s 0.4s forwards; }
+.btn-call-big {
+  display:inline-flex; align-items:center; gap:16px;
+  background:linear-gradient(135deg, #16a34a, #15803d);
+  color:#fff; padding:18px 32px; border-radius:12px;
+  font-weight:700; font-size:1.1rem;
+  box-shadow:0 8px 40px rgba(22,163,74,0.45);
+  transition:all 0.25s; margin-bottom:14px;
+  position:relative; overflow:hidden;
+  animation:pulseBig 2.5s infinite;
+}
+.btn-call-big::before {
+  content:'';
+  position:absolute; top:0; left:-100%; width:40%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  animation:shimmer 3s infinite;
+}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+@keyframes pulseBig{0%,100%{box-shadow:0 8px 40px rgba(22,163,74,0.45)}50%{box-shadow:0 8px 60px rgba(22,163,74,0.7)}}
+.btn-call-big:hover { transform:translateY(-3px) scale(1.02); }
+.btn-ico { font-size:1.5rem; }
+.tel-num { font-size:1.3rem; letter-spacing:-0.5px; line-height:1.2; }
+.tel-sub { font-size:0.69rem; font-weight:400; opacity:0.8; margin-top:2px; }
+
+.cta-note {
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  font-size:0.76rem; color:rgba(255,255,255,0.38); margin-top:10px;
+}
+.cta-note .ck { color:var(--green2); }
+
+/* Stats */
+.proof-counter {
+  display:flex; flex-wrap:wrap; gap:0;
+  margin-top:44px; padding-top:28px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  opacity:0; animation:fadeUp 0.6s 0.5s forwards;
+}
+.pc {
+  flex:1 1 80px; padding:0 20px 0 0;
+  border-right:1px solid rgba(255,255,255,0.07);
+}
+.pc:last-child { border:none; padding-right:0; }
+.pc:first-child { padding-left:0; }
+.pc-num {
+  font-family:'Syne',sans-serif;
+  font-size:1.8rem; font-weight:800;
+  color:var(--water); line-height:1; display:block;
+}
+.pc-label { font-size:0.65rem; color:rgba(255,255,255,0.28); text-transform:uppercase; letter-spacing:1px; margin-top:5px; display:block; }
+
+/* Mobile hero specific tweaks */
+@media(max-width:768px){
+  .hero-content { padding:85px 5% 50px; }
+  h1 { letter-spacing:-1.5px; }
+  .btn-call-big { padding:16px 24px; width:100%; justify-content:center; font-size:1rem; }
+  .tel-num { font-size:1.2rem; }
+  .cta-note { justify-content:center; }
+  .proof-counter { gap:0; }
+  .pc { padding:0 12px 0 0; }
+  .pc-num { font-size:1.5rem; }
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== SOCIAL PROOF BAR ===== */
+.proof-bar {
+  background:var(--off); border-top:1px solid var(--gray); border-bottom:1px solid var(--gray);
+  padding:14px 5%;
+  display:flex; align-items:center; justify-content:center;
+  gap:24px; flex-wrap:wrap;
+}
+.proof-item { display:flex; align-items:center; gap:7px; font-size:0.82rem; color:var(--muted); font-weight:500; white-space:nowrap; }
+.proof-item strong { color:var(--text); }
+.proof-sep { color:var(--gray); }
+@media(max-width:600px){.proof-sep{display:none;} .proof-item{flex:1 1 140px;} .proof-bar{gap:12px 0;}}
+
+/* ===== SECTION COMMON ===== */
+.s-tag {
+  font-size:0.68rem; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--blue2); display:inline-flex; align-items:center; gap:8px; margin-bottom:12px;
+}
+.s-tag::before { content:''; width:18px; height:2px; background:currentColor; flex-shrink:0; }
+.s-tag.light { color:var(--water); }
+
+h2 { font-family:'Syne',sans-serif; font-size:clamp(1.85rem,3.5vw,2.7rem); font-weight:800; letter-spacing:-1px; color:var(--navy); margin-bottom:10px; }
+h2 span { color:var(--blue2); }
+.s-desc { color:var(--muted); font-size:0.97rem; line-height:1.75; margin-bottom:48px; max-width:520px; }
+
+/* ===== PAIN SECTION ===== */
+.pain-section {
+  padding:80px 5%;
+  background:var(--navy); position:relative; overflow:hidden;
+}
+.pain-section::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 80% 50% at 50% 100%, rgba(29,70,196,0.15), transparent);
+}
+.pain-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+.pain-title { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,3.5vw,2.5rem); font-weight:800; color:#fff; letter-spacing:-1px; margin-bottom:10px; }
+.pain-title span { color:#f87171; }
+.pain-sub { color:rgba(255,255,255,0.4); margin-bottom:40px; font-size:0.95rem; }
+.pain-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+@media(max-width:768px){ .pain-grid{ grid-template-columns:1fr; } }
+
+.pain-card {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px; padding:22px 20px;
+  display:flex; align-items:flex-start; gap:14px;
+  transition:all 0.25s;
+}
+.pain-card:hover { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.14); }
+.pain-ico { font-size:1.7rem; flex-shrink:0; }
+.pain-txt strong { color:#fff; font-size:0.93rem; display:block; margin-bottom:5px; }
+.pain-txt p { color:rgba(255,255,255,0.38); font-size:0.82rem; line-height:1.65; }
+
+.pain-cta { text-align:center; margin-top:36px; }
+.pain-arrow { color:rgba(255,255,255,0.45); font-size:0.88rem; margin-bottom:8px; }
+.arrow-bounce { font-size:1.8rem; color:var(--green3); display:inline-block; animation:bounce 1.5s infinite; }
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ===== OFFER SECTION ===== */
+.offer-section { padding:90px 5%; background:var(--off); }
+.offer-inner { max-width:1100px; margin:0 auto; }
+.offer-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+@media(max-width:900px){ .offer-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .offer-grid{ grid-template-columns:1fr; } }
+
+.offer-card {
+  background:var(--white); border:1.5px solid var(--gray);
+  border-radius:14px; padding:28px 24px;
+  position:relative; overflow:hidden; transition:all 0.28s;
+}
+.offer-card:hover { border-color:var(--blue2); box-shadow:0 16px 48px rgba(29,78,216,0.1); transform:translateY(-5px); }
+.card-bar {
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, var(--blue2), var(--water));
+  transform:scaleX(0); transform-origin:left; transition:transform 0.35s;
+}
+.offer-card:hover .card-bar { transform:scaleX(1); }
+.badge-hot {
+  position:absolute; top:14px; right:14px;
+  background:#fef2f2; color:#dc2626;
+  font-size:0.62rem; font-weight:700; letter-spacing:0.8px; text-transform:uppercase;
+  padding:3px 9px; border-radius:50px; border:1px solid #fecaca;
+}
+.offer-icon { font-size:2rem; margin-bottom:14px; }
+.offer-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; color:var(--navy); margin-bottom:8px; }
+.offer-desc { color:var(--muted); font-size:0.85rem; line-height:1.65; margin-bottom:16px; }
+.offer-features { list-style:none; }
+.offer-features li { font-size:0.8rem; color:var(--text); padding:3px 0; display:flex; align-items:center; gap:7px; }
+.offer-features li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
+
+/* ===== MID CTA ===== */
+.urgence-cta {
+  padding:72px 5%; position:relative; overflow:hidden;
+  background:var(--navy);
+}
+.urgence-cta .bg {
+  position:absolute; inset:0;
+  background-image:url('https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1600&q=80&fit=crop');
+  background-size:cover; background-position:center; opacity:0.35;
+}
+.urgence-cta .inner {
+  position:relative; z-index:1;
+  max-width:680px; margin:0 auto; text-align:center;
+}
+.urgence-cta h2 { color:#fff; margin-bottom:10px; }
+.urgence-cta p { color:rgba(255,255,255,0.55); margin-bottom:32px; font-size:0.97rem; }
+.btn-cta-white {
+  display:inline-flex; align-items:center; gap:14px;
+  background:#fff; color:var(--navy);
+  padding:18px 44px; border-radius:10px;
+  font-weight:700; font-size:1.1rem;
+  box-shadow:0 8px 32px rgba(0,0,0,0.3); transition:all 0.2s;
+}
+.btn-cta-white:hover { transform:scale(1.04); box-shadow:0 12px 40px rgba(0,0,0,0.4); }
+.urgence-note { color:rgba(255,255,255,0.3); font-size:0.78rem; margin-top:14px; }
+@media(max-width:500px){ .btn-cta-white { padding:16px 28px; font-size:1rem; width:100%; justify-content:center; } }
+
+/* ===== TRUST / OBJECTIONS ===== */
+.trust-section { padding:90px 5%; background:var(--white); }
+.trust-inner { max-width:1100px; margin:0 auto; }
+.objection-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:700px){ .objection-grid{ grid-template-columns:1fr; } }
+
+.objection-card {
+  border-radius:14px; padding:26px 24px;
+  display:flex; gap:16px; align-items:flex-start;
+  transition:all 0.2s;
+}
+.objection-card.concern { background:#fff7ed; border:1.5px solid #fed7aa; }
+.objection-card.solution { background:#f0fdf4; border:1.5px solid #bbf7d0; }
+.objection-card:hover { transform:translateY(-2px); }
+.obj-ico { font-size:1.5rem; flex-shrink:0; margin-top:2px; }
+.obj-q { font-weight:700; font-size:0.92rem; color:var(--navy); margin-bottom:7px; }
+.obj-a { font-size:0.84rem; color:var(--muted); line-height:1.65; }
+
+/* ===== REVIEWS ===== */
+.reviews-section { padding:90px 5%; background:var(--off); position:relative; }
+.reviews-inner { max-width:1100px; margin:0 auto; }
+
+.rating-header {
+  display:flex; align-items:center; gap:28px;
+  margin-bottom:48px; flex-wrap:wrap;
+}
+.big-rating { text-align:center; }
+.big-rating .num { font-family:'Syne',sans-serif; font-size:4.5rem; font-weight:800; color:var(--navy); line-height:1; }
+.big-rating .stars-row { color:#f59e0b; font-size:1.2rem; letter-spacing:3px; }
+.big-rating .count { font-size:0.77rem; color:var(--muted); margin-top:4px; }
+.rating-bars { flex:1; min-width:180px; }
+.rbar { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.rbar-label { font-size:0.76rem; color:var(--muted); width:18px; text-align:right; }
+.rbar-track { flex:1; height:7px; background:var(--gray); border-radius:50px; overflow:hidden; }
+.rbar-fill { height:100%; background:#f59e0b; border-radius:50px; transition:width 1s ease; }
+.rbar-count { font-size:0.7rem; color:var(--muted); width:28px; }
+
+.reviews-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+@media(max-width:900px){ .reviews-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .reviews-grid{ grid-template-columns:1fr; } }
+
+.review-card {
+  background:var(--white); border:1px solid var(--gray);
+  border-radius:14px; padding:24px 22px; transition:all 0.25s;
+}
+.review-card:hover { box-shadow:0 8px 28px rgba(0,0,0,0.07); transform:translateY(-3px); }
+.review-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+.stars { color:#f59e0b; font-size:0.88rem; letter-spacing:2px; }
+.review-date { font-size:0.7rem; color:var(--muted); }
+.review-text { color:#475569; font-size:0.86rem; line-height:1.72; margin-bottom:16px; }
+.reviewer { display:flex; align-items:center; gap:10px; padding-top:14px; border-top:1px solid var(--gray); }
+.avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:linear-gradient(135deg, var(--blue2), var(--water));
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:0.78rem; font-family:'Syne',sans-serif; flex-shrink:0;
+}
+.rev-name { font-weight:600; font-size:0.83rem; color:var(--navy); }
+.rev-loc { font-size:0.7rem; color:var(--muted); }
+.verified { font-size:0.66rem; color:var(--green); font-weight:600; display:flex; align-items:center; gap:3px; margin-top:2px; }
+
+/* ===== PROCESS ===== */
+.process-section { padding:90px 5%; background:var(--navy); position:relative; overflow:hidden; }
+.process-section::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 70% 60% at 30% 50%, rgba(29,70,196,0.1), transparent);
+}
+.process-inner { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+
+.steps { display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative; }
+@media(max-width:768px){ .steps{ grid-template-columns:repeat(2,1fr); gap:24px; } }
+@media(max-width:480px){ .steps{ grid-template-columns:1fr; gap:20px; } }
+
+.steps::before {
+  content:''; position:absolute; top:28px; left:12.5%; right:12.5%; height:1px;
+  background:linear-gradient(90deg, rgba(96,165,250,0.2), rgba(96,165,250,0.5), rgba(96,165,250,0.2));
+}
+@media(max-width:768px){ .steps::before{ display:none; } }
+
+.step { text-align:center; padding:0 18px; }
+.step-bubble {
+  width:56px; height:56px; border-radius:50%;
+  background:linear-gradient(135deg, var(--blue2), var(--sky));
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem;
+  margin:0 auto 18px; position:relative; z-index:1;
+  box-shadow:0 0 0 6px rgba(29,70,196,0.18);
+}
+.step-title { font-family:'Syne',sans-serif; font-weight:700; color:#fff; font-size:0.93rem; margin-bottom:8px; }
+.step-desc { color:rgba(255,255,255,0.38); font-size:0.8rem; line-height:1.6; }
+.step-time { font-size:0.68rem; color:var(--water); font-weight:600; margin-top:8px; letter-spacing:0.3px; }
+
+/* ===== CONTACT ===== */
+.contact-section { padding:90px 5%; background:var(--white); }
+.contact-inner { max-width:1100px; margin:0 auto; }
+.contact-grid { display:grid; grid-template-columns:1fr 1.3fr; gap:60px; align-items:start; }
+@media(max-width:820px){ .contact-grid{ grid-template-columns:1fr; gap:36px; } }
+
+.contact-left p { color:var(--muted); line-height:1.75; margin-bottom:28px; font-size:0.95rem; }
+.phone-cta-box {
+  background:linear-gradient(135deg, var(--green), #166534);
+  border-radius:14px; padding:26px 22px;
+  margin-bottom:18px; display:block; transition:all 0.2s;
+  color:#fff; box-shadow:0 8px 32px rgba(22,163,74,0.3);
+}
+.phone-cta-box:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(22,163,74,0.45); }
+.ph-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:2px; opacity:0.7; margin-bottom:5px; }
+.ph-number { font-family:'Syne',sans-serif; font-size:1.85rem; font-weight:800; letter-spacing:-1px; }
+.ph-sub { font-size:0.78rem; opacity:0.7; margin-top:3px; }
+
+.contact-alt { display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap; }
+.alt-item {
+  flex:1 1 170px; background:var(--off); border:1px solid var(--gray);
+  border-radius:10px; padding:14px; display:flex; align-items:center; gap:10px;
+}
+.alt-ico { font-size:1.1rem; }
+.alt-label { font-size:0.67rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+.alt-val { font-weight:600; color:var(--navy); font-size:0.85rem; word-break:break-all; }
+.alt-val a:hover { color:var(--blue2); }
+
+.guarantee-box {
+  background:#f0fdf4; border:1px solid #bbf7d0;
+  border-radius:10px; padding:15px 16px;
+  font-size:0.83rem; color:#166534;
+  display:flex; align-items:flex-start; gap:9px;
+}
+.g-ico { font-size:1.1rem; flex-shrink:0; }
+
+/* Form */
+.form-box {
+  background:var(--off); border:1.5px solid var(--gray);
+  border-radius:16px; padding:32px 28px;
+}
+.form-box h3 { font-family:'Syne',sans-serif; font-weight:800; font-size:1.15rem; color:var(--navy); margin-bottom:5px; }
+.form-sub { font-size:0.8rem; color:var(--muted); margin-bottom:22px; }
+form { display:flex; flex-direction:column; gap:11px; }
+.frow { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+@media(max-width:480px){ .frow{ grid-template-columns:1fr; } }
+form input, form select, form textarea {
+  background:var(--white); border:1.5px solid var(--gray);
+  color:var(--text); padding:13px 14px;
+  border-radius:9px; font-family:'DM Sans',sans-serif;
+  font-size:0.92rem; outline:none; transition:border 0.2s, box-shadow 0.2s; width:100%;
+  -webkit-appearance:none; appearance:none;
+}
+form input:focus, form select:focus, form textarea:focus {
+  border-color:var(--blue2); box-shadow:0 0 0 4px rgba(29,70,196,0.08);
+}
+form textarea { height:95px; resize:vertical; }
+.btn-submit {
+  background:linear-gradient(135deg, var(--green), #166534);
+  color:#fff; border:none; padding:14px;
+  border-radius:9px; font-weight:700; font-size:0.97rem;
+  cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s;
+  box-shadow:0 6px 20px rgba(22,163,74,0.35);
+}
+.btn-submit:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(22,163,74,0.5); }
+.btn-submit:disabled { opacity:0.7; cursor:not-allowed; transform:none; }
+.form-microcopy { font-size:0.73rem; color:var(--muted); text-align:center; }
+.form-success { display:none; background:#f0fdf4; border:1px solid #86efac; color:#166534; padding:14px; border-radius:9px; text-align:center; font-weight:600; font-size:0.88rem; }
+
+/* ===== FOOTER ===== */
+footer { background:var(--navy); padding:36px 5% 24px; text-align:center; }
+.footer-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.25rem; color:#fff; }
+.footer-logo span { color:var(--water); }
+footer p { color:rgba(255,255,255,0.28); font-size:0.8rem; line-height:1.9; margin-top:8px; }
+footer a { color:var(--water); }
+.footer-hr { border:none; border-top:1px solid rgba(255,255,255,0.06); margin:18px 0; }
+
+/* ===== MOBILE STICKY BOTTOM ===== */
+.sticky-bottom {
+  display:none;
+  position:fixed; bottom:0; left:0; right:0; z-index:998;
+  background:var(--navy);
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding:10px 12px;
+  gap:8px;
+  padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+  box-shadow:0 -8px 32px rgba(0,0,0,0.5);
+}
+@media(max-width:768px){ .sticky-bottom{ display:flex; } }
+
+.sticky-bottom a {
+  flex:1; text-align:center;
+  padding:13px 10px;
+  border-radius:10px; text-decoration:none; font-weight:700; font-size:0.88rem;
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  transition:all 0.15s;
+}
+.sticky-call {
+  background:linear-gradient(135deg, var(--green), #166534);
+  color:#fff; box-shadow:0 4px 18px rgba(22,163,74,0.4);
+  animation:pulseGreen 2.5s infinite;
+}
+.sticky-call:active { transform:scale(0.97); }
+.sticky-form {
+  background:rgba(255,255,255,0.07);
+  color:rgba(255,255,255,0.8);
+  border:1px solid rgba(255,255,255,0.14);
+}
+.sticky-form:active { background:rgba(255,255,255,0.12); }
+
+/* Bottom padding for sticky bar */
+@media(max-width:768px){ body { padding-bottom:calc(70px + env(safe-area-inset-bottom, 0px)); } }
+
+/* ===== FLOATING DESKTOP BTN ===== */
+.float-wrap {
+  position:fixed; bottom:28px; right:28px; z-index:997;
+  display:flex; flex-direction:column; align-items:flex-end; gap:10px;
+}
+@media(max-width:768px){ .float-wrap{ display:none; } }
+.float-bubble {
+  background:var(--navy); color:#fff;
+  font-size:0.73rem; font-weight:600;
+  padding:6px 14px; border-radius:20px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+  white-space:nowrap;
+  opacity:0; animation:fadeRight 0.5s 1.8s forwards;
+}
+@keyframes fadeRight{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.float-btn {
+  width:56px; height:56px; border-radius:50%;
+  background:linear-gradient(135deg, var(--green), #166534);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem;
+  box-shadow:0 6px 24px rgba(22,163,74,0.5);
+  animation:pulseGreen 2.5s infinite; transition:transform 0.2s;
+}
+.float-btn:hover { transform:scale(1.1); }
+
+/* ===== REVEAL ANIMATION ===== */
+.reveal { opacity:0; transform:translateY(18px); transition:opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ===== MOBILE GLOBAL FIXES ===== */
+@media(max-width:768px){
+  .top-bar { font-size:0.75rem; padding:8px 4%; gap:6px; }
+  header { padding:0 4%; height:58px; }
+  .logo { font-size:1.05rem; }
+  h2 { letter-spacing:-0.5px; }
+  .s-desc { margin-bottom:32px; }
+  .pain-section, .offer-section, .trust-section, .reviews-section, .process-section, .contact-section { padding:64px 5%; }
+  .urgence-cta { padding:56px 5%; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP URGENCY BAR -->
+<div class="top-bar">
+  <span class="blink">🔴</span>
+  <span>Plombier disponible <strong>maintenant à Rennes</strong> — Intervention &lt;1h</span>
+  <a href="tel:+33250857464">📞 02 50 85 74 64</a>
+</div>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="logo">Mehdi <span>Bouzera</span><small>Plombier · Rennes</small></div>
+  <div class="header-right">
+    <a href="tel:+33250857464" class="header-tel">📞 02 50 85 74 64</a>
+    <a href="tel:+33250857464" class="btn-header">
+      <span>📞</span>
+      <span class="btn-txt">Appeler maintenant</span>
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=85&fit=crop" alt="" loading="eager" fetchpriority="high">
+  </div>
+  <div class="hero-decor hero-decor-circle"></div>
+  <div class="hero-decor hero-decor-line"></div>
+
+  <div class="hero-content">
+    <div class="hero-inner">
+      <div class="live-tag"><span class="live-dot"></span> Disponible maintenant</div>
+
+      <h1>
+        Votre fuite<br>
+        <span class="highlight">stoppée en 1h</span><br>
+        <span class="accent">à Rennes</span>
+      </h1>
+
+      <div class="hero-promise">
+        <div class="promise-pill"><span class="ck">✓</span> Devis gratuit</div>
+        <div class="promise-pill"><span class="ck">✓</span> 7j/7 · 24h/24</div>
+        <div class="promise-pill"><span class="ck">✓</span> Prix fixe annoncé</div>
+      </div>
+
+      <p class="hero-sub">Fuite d'eau, WC bouché, chauffe-eau en panne — chaque minute compte. Mehdi intervient directement chez vous, sans intermédiaire.</p>
+
+      <div class="cta-zone">
+        <a href="tel:+33250857464" class="btn-call-big">
+          <span class="btn-ico">📞</span>
+          <div>
+            <div class="tel-num">02 50 85 74 64</div>
+            <div class="tel-sub">Décroché en moins de 3 sonneries</div>
+          </div>
+        </a>
+        <div class="cta-note">
+          <span class="ck">✓</span> Devis gratuit &nbsp;·&nbsp;
+          <span class="ck">✓</span> Sans engagement &nbsp;·&nbsp;
+          <span class="ck">✓</span> Prix annoncé avant
+        </div>
+      </div>
+
+      <div class="proof-counter">
+        <div class="pc"><span class="pc-num">+300</span><span class="pc-label">Clients à Rennes</span></div>
+        <div class="pc"><span class="pc-num">5/5</span><span class="pc-label">Note moyenne</span></div>
+        <div class="pc"><span class="pc-num">&lt;1h</span><span class="pc-label">Délai moyen</span></div>
+        <div class="pc"><span class="pc-num">10+</span><span class="pc-label">Ans d'expérience</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF BAR -->
+<div class="proof-bar">
+  <div class="proof-item">⭐⭐⭐⭐⭐ <strong>5/5</strong> sur Google</div>
+  <div class="proof-sep">|</div>
+  <div class="proof-item">✅ <strong>+300 interventions</strong> à Rennes</div>
+  <div class="proof-sep">|</div>
+  <div class="proof-item">⚡ <strong>Moins d'1h</strong> de délai moyen</div>
+  <div class="proof-sep">|</div>
+  <div class="proof-item">🛡️ <strong>Devis gratuit</strong> et sans surprise</div>
+</div>
+
+<!-- PAIN SECTION -->
+<section class="pain-section">
+  <div class="pain-inner">
+    <p class="s-tag light reveal">Vous êtes dans cette situation ?</p>
+    <h2 class="pain-title reveal">Ces problèmes ne <span style="color:#f87171">s'arrangent pas</span> tout seuls</h2>
+    <p class="pain-sub reveal">Chaque heure perdue aggrave les dégâts et augmente le coût des réparations</p>
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <div class="pain-ico">💧</div>
+        <div class="pain-txt">
+          <strong>Une fuite qui ne s'arrête pas</strong>
+          <p>L'eau abîme les murs, le parquet, provoque des moisissures. Le coût des dégâts double toutes les 24h.</p>
+        </div>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-ico">🚽</div>
+        <div class="pain-txt">
+          <strong>WC ou évier complètement bouché</strong>
+          <p>Impossible d'utiliser vos sanitaires. Votre famille attend une solution rapide.</p>
+        </div>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-ico">🚿</div>
+        <div class="pain-txt">
+          <strong>Plus d'eau chaude</strong>
+          <p>Chauffe-eau ou chaudière en panne. Douches froides pour toute la famille.</p>
+        </div>
+      </div>
+    </div>
+    <div class="pain-cta reveal">
+      <p class="pain-arrow">Ne laissez pas la situation s'aggraver — appelez maintenant</p>
+      <span class="arrow-bounce">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="offer-section">
+  <div class="offer-inner">
+    <p class="s-tag reveal">Ce que je fais</p>
+    <h2 class="reveal">Tous mes services <span>à Rennes</span></h2>
+    <p class="s-desc reveal">Intervention rapide, travail soigné, prix annoncé avant de commencer.</p>
+    <div class="offer-grid">
+      <div class="offer-card reveal">
+        <div class="card-bar"></div>
+        <div class="badge-hot">URGENCE</div>
+        <div class="offer-icon">💧</div>
+        <div class="offer-name">Fuites & urgences</div>
+        <div class="offer-desc">Fuite d'eau, tuyau cassé, robinet qui coule. Je stoppe les dégâts en urgence.</div>
+        <ul class="offer-features">
+          <li>Intervention en moins d'1h</li>
+          <li>7j/7 et 24h/24</li>
+          <li>Réparation durable</li>
+        </ul>
+      </div>
+      <div class="offer-card reveal">
+        <div class="card-bar"></div>
+        <div class="badge-hot">URGENCE</div>
+        <div class="offer-icon">🚽</div>
+        <div class="offer-name">Débouchage</div>
+        <div class="offer-desc">Évier, WC, douche, baignoire. Débouchage professionnel garanti le jour même.</div>
+        <ul class="offer-features">
+          <li>Résultat garanti</li>
+          <li>Matériel professionnel</li>
+          <li>Nettoyage après intervention</li>
+        </ul>
+      </div>
+      <div class="offer-card reveal">
+        <div class="card-bar"></div>
+        <div class="offer-icon">🔥</div>
+        <div class="offer-name">Chauffe-eau & chaudière</div>
+        <div class="offer-desc">Panne, remplacement, entretien. Toutes marques. Retour à l'eau chaude le jour même.</div>
+        <ul class="offer-features">
+          <li>Diagnostic offert</li>
+          <li>Pièces disponibles</li>
+          <li>Toutes marques</li>
+        </ul>
+      </div>
+      <div class="offer-card reveal">
+        <div class="card-bar"></div>
+        <div class="offer-icon">🛁</div>
+        <div class="offer-name">Installation salle de bain</div>
+        <div class="offer-desc">Douche à l'italienne, baignoire, lavabo, WC suspendu. Rénovation complète possible.</div>
+        <ul class="offer-features">
+          <li>Devis détaillé gratuit</li>
+          <li>Délais respectés</li>
+          <li>Finitions soignées</li>
+        </ul>
+      </div>
+      <div class="offer-card reveal">
+        <div class="card-bar"></div>
+        <div class="offer-icon">🏗️</div>
+        <div class="offer-name">Rénovation plomberie</div>
+        <div class="offer-desc">Mise aux normes, remplacement de tuyauteries, travaux neufs ou rénovation.</div>
+        <ul class="offer-features">
+          <li>Devis gratuit</li>
+          <li>Travaux conformes aux normes</li>
+          <li>Garantie sur les travaux</li>
+        </ul>
+      </div>
+      <div class="offer-card reveal">
+        <div class="card-bar"></div>
+        <div class="offer-icon">🔍</div>
+        <div class="offer-name">Diagnostic & devis</div>
+        <div class="offer-desc">Repérage de fuites, diagnostic complet. Devis offert, sans engagement, sans surprise.</div>
+        <ul class="offer-features">
+          <li>100% gratuit</li>
+          <li>Rapport détaillé</li>
+          <li>Aucun engagement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MID CTA -->
+<section class="urgence-cta">
+  <div class="bg"></div>
+  <div class="inner">
+    <h2 class="reveal" style="color:#fff">⚡ Une urgence <span style="color:var(--water)">en ce moment ?</span></h2>
+    <p class="reveal">Ne laissez pas l'eau endommager votre domicile. Chaque minute compte. Mehdi répond maintenant.</p>
+    <a href="tel:+33250857464" class="btn-cta-white reveal">
+      📞 <span>Appeler le 02 50 85 74 64</span>
+    </a>
+    <p class="urgence-note reveal">Disponible 7j/7 · 24h/24 · Devis gratuit avant intervention</p>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust-section">
+  <div class="trust-inner">
+    <p class="s-tag reveal">Vos questions</p>
+    <h2 class="reveal">Vous vous demandez <span>si c'est le bon choix ?</span></h2>
+    <p class="s-desc reveal">Voici les vraies réponses à vos vraies questions</p>
+    <div class="objection-grid">
+      <div class="objection-card concern reveal">
+        <div class="obj-ico">🤔</div>
+        <div>
+          <div class="obj-q">« Est-ce que ça va coûter très cher ? »</div>
+          <div class="obj-a">Le devis est gratuit et annoncé avant de commencer. Vous savez exactement combien ça coûte avant que Mehdi touche quoi que ce soit. Zéro mauvaise surprise.</div>
+        </div>
+      </div>
+      <div class="objection-card solution reveal">
+        <div class="obj-ico">✅</div>
+        <div>
+          <div class="obj-q">Transparence totale sur les tarifs</div>
+          <div class="obj-a">Prix fixe annoncé avant intervention. Si vous n'acceptez pas le devis, vous ne payez rien. C'est aussi simple que ça.</div>
+        </div>
+      </div>
+      <div class="objection-card concern reveal">
+        <div class="obj-ico">🤔</div>
+        <div>
+          <div class="obj-q">« Est-ce qu'il va vraiment venir rapidement ? »</div>
+          <div class="obj-a">Mehdi est basé à Rennes. Pas de centre d'appels, pas de sous-traitant. Vous l'appelez, il vient. Délai moyen constaté : moins d'1 heure.</div>
+        </div>
+      </div>
+      <div class="objection-card solution reveal">
+        <div class="obj-ico">✅</div>
+        <div>
+          <div class="obj-q">Artisan local, pas une franchise</div>
+          <div class="obj-a">Vous parlez directement à Mehdi. Il connaît Rennes et ses quartiers. Pas d'intermédiaire, pas d'attente inutile.</div>
+        </div>
+      </div>
+      <div class="objection-card concern reveal">
+        <div class="obj-ico">🤔</div>
+        <div>
+          <div class="obj-q">« Est-ce que le travail sera bien fait ? »</div>
+          <div class="obj-a">Plus de 300 clients satisfaits à Rennes et alentours. Note 5/5. Mehdi signe ses interventions : si ce n'est pas parfait, il revient.</div>
+        </div>
+      </div>
+      <div class="objection-card solution reveal">
+        <div class="obj-ico">✅</div>
+        <div>
+          <div class="obj-q">Garantie satisfaction</div>
+          <div class="obj-a">Chaque intervention est garantie. 10 ans d'expérience, des matériaux de qualité professionnelle et un résultat durable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section">
+  <div class="reviews-inner">
+    <p class="s-tag reveal">Avis clients</p>
+    <h2 class="reveal">Ils ont fait confiance <span>à Mehdi</span></h2>
+    <div class="rating-header reveal">
+      <div class="big-rating">
+        <div class="num">5.0</div>
+        <div class="stars-row">★★★★★</div>
+        <div class="count">+300 avis Google</div>
+      </div>
+      <div class="rating-bars">
+        <div class="rbar"><span class="rbar-label">5</span><div class="rbar-track"><div class="rbar-fill" style="width:94%"></div></div><span class="rbar-count">94%</span></div>
+        <div class="rbar"><span class="rbar-label">4</span><div class="rbar-track"><div class="rbar-fill" style="width:5%;background:#94a3b8"></div></div><span class="rbar-count">5%</span></div>
+        <div class="rbar"><span class="rbar-label">3</span><div class="rbar-track"><div class="rbar-fill" style="width:1%;background:#cbd5e1"></div></div><span class="rbar-count">1%</span></div>
+        <div class="rbar"><span class="rbar-label">2</span><div class="rbar-track"><div class="rbar-fill" style="width:0%"></div></div><span class="rbar-count">0%</span></div>
+        <div class="rbar"><span class="rbar-label">1</span><div class="rbar-track"><div class="rbar-fill" style="width:0%"></div></div><span class="rbar-count">0%</span></div>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-top"><div class="stars">★★★★★</div><div class="review-date">Il y a 3 jours</div></div>
+        <div class="review-text">Mehdi est venu en urgence un samedi soir pour une fuite sous l'évier. En moins de 45 minutes tout était réglé. Prix très raisonnable et clairement annoncé avant. Je recommande les yeux fermés !</div>
+        <div class="reviewer"><div class="avatar">SM</div><div><div class="rev-name">Sophie M.</div><div class="rev-loc">📍 Rennes Centre</div><div class="verified">✓ Client vérifié Google</div></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-top"><div class="stars">★★★★★</div><div class="review-date">Il y a 1 semaine</div></div>
+        <div class="review-text">WC bouché depuis la veille. Mehdi est arrivé en 40 minutes, a tout réglé en une demi-heure. Ponctuel, propre, efficace. Le rapport qualité-prix est excellent. Merci !</div>
+        <div class="reviewer"><div class="avatar">KD</div><div><div class="rev-name">Karim D.</div><div class="rev-loc">📍 Cesson-Sévigné</div><div class="verified">✓ Client vérifié Google</div></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-top"><div class="stars">★★★★★</div><div class="review-date">Il y a 2 semaines</div></div>
+        <div class="review-text">Installation complète de ma douche à l'italienne. Travail impeccable, délais respectés, chantier nettoyé après. Mehdi est un vrai professionnel. Je ferai appel à lui pour la suite des travaux.</div>
+        <div class="reviewer"><div class="avatar">LB</div><div><div class="rev-name">Lucie B.</div><div class="rev-loc">📍 Saint-Grégoire</div><div class="verified">✓ Client vérifié Google</div></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-top"><div class="stars">★★★★★</div><div class="review-date">Il y a 3 semaines</div></div>
+        <div class="review-text">Chauffe-eau en panne le matin. Mehdi a diagnostiqué, commandé la pièce et tout réparé dans la journée. Ma famille a pu avoir de l'eau chaude le soir même. Merci !</div>
+        <div class="reviewer"><div class="avatar">PF</div><div><div class="rev-name">Pierre F.</div><div class="rev-loc">📍 Pacé</div><div class="verified">✓ Client vérifié Google</div></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-top"><div class="stars">★★★★★</div><div class="review-date">Il y a 1 mois</div></div>
+        <div class="review-text">Fuite derrière la cloison. Mehdi a localisé la fuite précisément, limité les dégâts, réparé proprement. Très rassurant et compétent. Je le conseille à tous mes voisins !</div>
+        <div class="reviewer"><div class="avatar">MR</div><div><div class="rev-name">Marie R.</div><div class="rev-loc">📍 Bruz</div><div class="verified">✓ Client vérifié Google</div></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-top"><div class="stars">★★★★★</div><div class="review-date">Il y a 1 mois</div></div>
+        <div class="review-text">Devis gratuit le lendemain matin, travaux réalisés dans la semaine. Pose de lavabo et WC suspendu impeccable. Prix honnête, communication claire. Top !</div>
+        <div class="reviewer"><div class="avatar">AT</div><div><div class="rev-name">Antoine T.</div><div class="rev-loc">📍 Rennes Nord</div><div class="verified">✓ Client vérifié Google</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section">
+  <div class="process-inner">
+    <p class="s-tag light reveal">Comment ça marche</p>
+    <h2 class="reveal" style="color:#fff">Résolu en <span style="color:var(--water)">4 étapes simples</span></h2>
+    <p class="s-desc reveal" style="color:rgba(255,255,255,0.4)">De votre appel à la solution — pas de complication</p>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-bubble">1</div>
+        <div class="step-title">Vous appelez</div>
+        <div class="step-desc">Mehdi décroche. Vous expliquez le problème. Pas de menu automatique, pas d'attente.</div>
+        <div class="step-time">⚡ Décroché en &lt;3 sonneries</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-bubble">2</div>
+        <div class="step-title">Devis gratuit</div>
+        <div class="step-desc">Prix annoncé clairement avant toute intervention. Vous acceptez ou non — sans pression.</div>
+        <div class="step-time">💰 0€ si vous refusez</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-bubble">3</div>
+        <div class="step-title">Mehdi intervient</div>
+        <div class="step-desc">Il arrive en moins d'une heure pour les urgences. Travail propre, matériel professionnel.</div>
+        <div class="step-time">🚗 &lt;1h pour les urgences</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-bubble">4</div>
+        <div class="step-title">Problème résolu</div>
+        <div class="step-desc">Vérification complète avant de partir. Vous ne payez que ce qui a été annoncé. Garanti.</div>
+        <div class="step-time">✅ Satisfaction garantie</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-grid">
+      <div class="contact-left">
+        <p class="s-tag reveal">Prendre contact</p>
+        <h2 class="reveal">Appelez ou <span>envoyez un message</span></h2>
+        <p class="reveal">Pour une urgence, appelez directement — Mehdi décroche. Pour un devis ou un projet, le formulaire suffit.</p>
+        <a href="tel:+33250857464" class="phone-cta-box reveal">
+          <div class="ph-label">📞 Appel direct · 7j/7 · 24h/24</div>
+          <div class="ph-number">02 50 85 74 64</div>
+          <div class="ph-sub">→ Décroché en moins de 3 sonneries</div>
+        </a>
+        <div class="contact-alt reveal">
+          <div class="alt-item">
+            <div class="alt-ico">✉️</div>
+            <div>
+              <div class="alt-label">Email</div>
+              <div class="alt-val"><a href="mailto:wluminoradigital@gmail.com">wluminoradigital@gmail.com</a></div>
+            </div>
+          </div>
+          <div class="alt-item">
+            <div class="alt-ico">📍</div>
+            <div>
+              <div class="alt-label">Zone d'intervention</div>
+              <div class="alt-val">Rennes · Cesson · St-Grégoire · Bruz · Pacé</div>
+            </div>
+          </div>
+        </div>
+        <div class="guarantee-box reveal">
+          <div class="g-ico">🛡️</div>
+          <div><strong>Garantie satisfaction</strong> — Si vous n'êtes pas satisfait, Mehdi revient corriger. Sans discussion, sans surcoût.</div>
+        </div>
+      </div>
+
+      <div class="contact-right reveal">
+        <div class="form-box">
+          <h3>Demander un devis gratuit</h3>
+          <p class="form-sub">Réponse garantie sous 1h en journée · Sans engagement</p>
+          <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <input type="hidden" name="_subject" value="🔧 Nouvelle demande – Mehdi Bouzera Plombier">
+            <div class="frow">
+              <input type="text" name="nom" placeholder="Votre nom *" required autocomplete="name">
+              <input type="tel" name="telephone" placeholder="Votre téléphone *" required autocomplete="tel">
+            </div>
+            <select name="intervention" required>
+              <option value="" disabled selected>Type d'intervention *</option>
+              <option>⚡ Urgence / Fuite d'eau</option>
+              <option>🚽 Débouchage</option>
+              <option>🔥 Chauffe-eau / Chaudière</option>
+              <option>🛁 Installation salle de bain</option>
+              <option>🏗️ Rénovation plomberie</option>
+              <option>🔍 Diagnostic / Devis</option>
+            </select>
+            <textarea name="message" placeholder="Décrivez brièvement votre problème…"></textarea>
+            <button type="submit" class="btn-submit">✅ Envoyer ma demande — Gratuit & sans engagement</button>
+            <p class="form-microcopy">🔒 Vos données restent confidentielles. Aucun démarchage.</p>
+            <div class="form-success" id="form-success">✅ Message reçu ! Mehdi vous rappelle dans l'heure.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Mehdi <span>Bouzera</span></div>
+  <p>Plombier à Rennes · <a href="tel:+33250857464">02 50 85 74 64</a></p>
+  <hr class="footer-hr">
+  <p>© 2025 Mehdi Bouzera · Intervention rapide · Devis gratuit · Rennes et alentours (Cesson, St-Grégoire, Bruz, Pacé)</p>
+</footer>
+
+<!-- STICKY MOBILE BOTTOM BAR -->
+<div class="sticky-bottom">
+  <a href="tel:+33250857464" class="sticky-call">📞 Appeler maintenant</a>
+  <a href="#contact" class="sticky-form">✉️ Devis gratuit</a>
+</div>
+
+<!-- FLOAT DESKTOP -->
+<div class="float-wrap">
+  <div class="float-bubble">Urgence ? Appelez !</div>
+  <a href="tel:+33250857464" class="float-btn" title="Appeler Mehdi">📞</a>
+</div>
+
+<script>
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Header shadow on scroll
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// Form submission
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('.btn-submit');
+  btn.textContent = '⏳ Envoi en cours…'; btn.disabled = true;
+  try {
+    const res = await fetch(this.action, {
+      method: 'POST',
+      body: new FormData(this),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      this.reset();
+      const success = document.getElementById('form-success');
+      success.style.display = 'block';
+      setTimeout(() => success.style.display = 'none', 8000);
+    }
+  } catch(err) {}
+  btn.textContent = '✅ Envoyer ma demande — Gratuit & sans engagement';
+  btn.disabled = false;
+});
+
+// Hide float bubble after 5s
+setTimeout(() => {
+  const b = document.querySelector('.float-bubble');
+  if (b) { b.style.transition = 'opacity 0.5s'; b.style.opacity = '0'; }
+}, 5000);
+
+// Smooth scroll for #contact links
+document.querySelectorAll('a[href="#contact"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
